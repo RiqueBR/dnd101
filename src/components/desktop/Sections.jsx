@@ -33,7 +33,7 @@ export const ClassesSection = () => {
   const toggle = (c) => setSelected(prev => prev?.id === c.id ? null : c);
   return (
     <div>
-      <SectionHeader title="Classes" subtitle="Your class is your adventuring profession—it shapes your abilities, combat style, and role in the party. Each class rewards a different style of play." />
+      <SectionHeader title="Classes" subtitle="Your class is your adventuring profession. It shapes your abilities, combat style, and role in the party. Each class rewards a different style of play." />
       {selected && <DetailPanel item={selected} type="class" onClose={() => setSelected(null)} />}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(270px, 1fr))', gap: 12 }}>
         {classes.map(c => <ClassCard key={c.id} cls={c} onClick={toggle} isSelected={selected?.id === c.id} />)}
@@ -50,7 +50,7 @@ export const AbilityScoresSection = () => {
       <SectionHeader title="Ability Scores" subtitle="Six core numbers define every creature in D&D. They determine your strengths, weaknesses, and which skills and spells you excel at." />
       <div style={{ marginBottom: 18, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 8, padding: '14px 18px', fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.7 }}>
         <strong style={{ color: 'var(--text)', fontFamily: 'var(--font-heading)' }}>How Modifiers Work: </strong>
-        Your score isn't used directly—you calculate a modifier: <span style={{ fontFamily: 'monospace', color: 'var(--accent)' }}>(score − 10) ÷ 2, rounded down</span>. A score of 10 = +0. A score of 16 = +3. This modifier is what gets added to dice rolls.
+        Your score isn't used directly. You calculate a modifier: <span style={{ fontFamily: 'monospace', color: 'var(--accent)' }}>(score − 10) ÷ 2, rounded down</span>. A score of 10 = +0. A score of 16 = +3. This modifier is what gets added to dice rolls.
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 14 }}>
         {abilityScores.map(score => (
@@ -118,7 +118,7 @@ export const SpellsSection = () => {
 
   return (
     <div>
-      <SectionHeader title="Spells" subtitle="Magic is woven into D&D's fabric. Spells range from cantrips (free, infinite use) to 9th-level world-shaking magic. Each spell shows you what to roll." />
+      <SectionHeader title="Spells" subtitle="Spells range from free, infinite-use cantrips to world-shaking 9th-level magic. Each one here shows you exactly what to roll." />
 
       {/* Dice primer */}
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 8, padding: '13px 17px', marginBottom: 18, fontSize: 12.5, color: 'var(--text-muted)', lineHeight: 1.7 }}>
@@ -207,11 +207,11 @@ export const ActionsSection = () => {
   const { actions } = DND_DATA;
   return (
     <div>
-      <SectionHeader title="Actions" subtitle="Every turn in combat, you get one Action, one Bonus Action, and one Reaction. Here's the full menu of what you can do—and when." />
+      <SectionHeader title="Actions" subtitle="Every turn in combat, you get one Action, one Bonus Action, and one Reaction. Here's the full menu of what you can do, and when." />
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, marginBottom: 24 }}>
         {[['Action', 'Your main turn activity. Attack, cast a spell, dash, or more.', '#c8743a'],
           ['Bonus Action', 'Some abilities, spells, or class features let you act again.', '#4a6fa5'],
-          ['Reaction', 'Triggered by specific events—even on other people\'s turns.', '#8b3a3a']
+          ['Reaction', 'Triggered by specific events, even on other people\'s turns.', '#8b3a3a']
         ].map(([name, desc, color]) => (
           <div key={name} style={{ background: 'var(--surface)', border: `1px solid ${color}44`, borderTop: `2px solid ${color}`, borderRadius: 6, padding: '12px 14px' }}>
             <div style={{ fontFamily: 'var(--font-heading)', fontSize: 13, fontWeight: 700, color: color, marginBottom: 5 }}>{name}</div>
@@ -287,7 +287,7 @@ export const RoundsSection = () => {
       </div>
 
       {/* Initiative */}
-      <Label>Step 0 — Rolling Initiative</Label>
+      <Label>Step 0: Rolling Initiative</Label>
       <div style={{ background: 'var(--surface)', border: '1px solid var(--accent-border)', borderLeft: '3px solid var(--accent)', borderRadius: 8, padding: '18px 22px', marginBottom: 28, display: 'flex', gap: 20, alignItems: 'center', flexWrap: 'wrap' }}>
         <Die sides={20} label="Initiative" />
         <div style={{ flex: 1, minWidth: 240 }}>
@@ -299,7 +299,7 @@ export const RoundsSection = () => {
       </div>
 
       {/* Turn flow */}
-      <Label>On Your Turn — the 6 Steps</Label>
+      <Label>On Your Turn: the 6 Steps</Label>
       <div style={{ position: 'relative', marginBottom: 28 }}>
         {rounds.turnFlow.map((step, i) => (
           <div key={step.step} style={{ display: 'flex', gap: 14, marginBottom: 9, position: 'relative' }}>
@@ -316,7 +316,7 @@ export const RoundsSection = () => {
       </div>
 
       {/* Reactions */}
-      <Label>Reactions — the Off-Turn Exception</Label>
+      <Label>Reactions: the Off-Turn Exception</Label>
       <div style={{ background: 'var(--surface)', border: '1px solid #8b3a3a44', borderLeft: '3px solid #8b3a3a', borderRadius: 8, padding: '14px 18px', marginBottom: 28 }}>
         <p style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.7, margin: 0 }}>{rounds.reactionsNote}</p>
       </div>

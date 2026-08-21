@@ -119,7 +119,7 @@ export const MClasses = () => {
         <div style={{fontSize:13,color:'var(--text-muted)',lineHeight:1.6}}><strong style={{color:'var(--text)'}}>Armor: </strong>{sel.armorProf}</div>
         <div style={{fontSize:13,color:'var(--text-muted)',lineHeight:1.6,marginTop:4}}><strong style={{color:'var(--text)'}}>Weapons: </strong>{sel.weaponProf}</div>
       </MCard>
-      <MLabel>Key Features — Levels 1–5</MLabel>
+      <MLabel>Key Features: Levels 1-5</MLabel>
       <div style={{display:'grid',gap:8,paddingBottom:8}}>{sel.keyFeatures.map(f=>(
         <MCard key={f.name}>
           <div style={{display:'flex',gap:10,alignItems:'center',marginBottom:5}}>
@@ -158,9 +158,9 @@ export const MPair = () => {
   );
   return (
     <div>
-      <MLabel>1 — Pick a Race</MLabel>
+      <MLabel>1. Pick a Race</MLabel>
       {picker(races, r, setR)}
-      <MLabel>2 — Pick a Class</MLabel>
+      <MLabel>2. Pick a Class</MLabel>
       {picker(classes, c, setC)}
       <div style={{marginTop:22}}>
       {res && ro && co ? (
@@ -297,7 +297,7 @@ const MActions = () => {
   return (
     <div>
       <div style={{display:'grid',gap:8}}>
-        {[['Action','Your one main activity each turn.','#c8743a'],['Bonus Action','A secondary act, only if a feature grants one.','#4a6fa5'],['Reaction','One per round, triggered — even off-turn.','#8b3a3a']].map(([n,d,c])=>(
+        {[['Action','Your one main activity each turn.','#c8743a'],['Bonus Action','A secondary act, only if a feature grants one.','#4a6fa5'],['Reaction','One per round. Can trigger even off-turn.','#8b3a3a']].map(([n,d,c])=>(
           <div key={n} style={{background:'var(--surface)',border:`1px solid ${c}44`,borderLeft:`3px solid ${c}`,borderRadius:9,padding:'11px 13px'}}>
             <div style={{fontFamily:'var(--font-heading)',fontSize:14,fontWeight:700,color:c}}>{n}</div>
             <div style={{fontSize:12.5,color:'var(--text-muted)',lineHeight:1.5,marginTop:3}}>{d}</div>
@@ -339,7 +339,7 @@ const MRound = () => {
   return (
     <div>
       <MCard><p style={{fontSize:14,color:'var(--text)',lineHeight:1.65,margin:0}}>{rounds.overview}</p></MCard>
-      <MLabel>Step 0 — Initiative</MLabel>
+      <MLabel>Step 0: Initiative</MLabel>
       <div style={{background:'var(--surface)',border:'1px solid var(--accent-border)',borderLeft:'3px solid var(--accent)',borderRadius:10,padding:'15px 14px',display:'flex',gap:15,alignItems:'flex-start'}}>
         <MDie sides={20} />
         <div style={{flex:1}}>

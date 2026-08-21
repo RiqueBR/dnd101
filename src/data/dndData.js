@@ -1,4 +1,4 @@
-// D&D 101 — Core Data
+// D&D 101 core data
 export const DND_DATA = {
 
   races: [
@@ -24,7 +24,7 @@ export const DND_DATA = {
       name: "Elf",
       icon: "E",
       tagline: "Ancient, graceful, perceptive",
-      description: "Elves are a magical people of otherworldly grace. They have pointed ears, slender frames, and live for centuries—accumulating deep knowledge and skill.",
+      description: "Elves are a magical people of otherworldly grace. They have pointed ears, slender frames, and live for centuries, accumulating deep knowledge and skill.",
       statBonuses: { DEX: 2 },
       subRaces: [
         { name: "High Elf", bonuses: { INT: 1 }, extra: "One wizard cantrip" },
@@ -35,7 +35,7 @@ export const DND_DATA = {
         { name: "Darkvision", desc: "See in dim light as if bright, darkness as dim light, up to 60 ft." },
         { name: "Keen Senses", desc: "Proficiency in the Perception skill." },
         { name: "Fey Ancestry", desc: "Advantage on saving throws against being charmed; immune to magical sleep." },
-        { name: "Trance", desc: "Elves don't sleep—they meditate deeply for 4 hours instead." }
+        { name: "Trance", desc: "Elves don't sleep. They meditate deeply for 4 hours instead." }
       ],
       size: "Medium", speed: 30,
       bestClasses: ["Ranger", "Rogue", "Wizard", "Druid"],
@@ -67,10 +67,10 @@ export const DND_DATA = {
       name: "Halfling",
       icon: "Hf",
       tagline: "Lucky, nimble, brave",
-      description: "Halflings are a small folk who value the comforts of home—but who often find themselves on grand adventures thanks to their natural luck and courage.",
+      description: "Halflings are a small folk who value the comforts of home, but who often find themselves on grand adventures thanks to their natural luck and courage.",
       statBonuses: { DEX: 2 },
       subRaces: [
-        { name: "Lightfoot", bonuses: { CHA: 1 }, extra: "Naturally Stealthy—hide behind larger creatures" },
+        { name: "Lightfoot", bonuses: { CHA: 1 }, extra: "Naturally Stealthy: hide behind larger creatures" },
         { name: "Stout", bonuses: { CON: 1 }, extra: "Stout Resilience (like Dwarven Resilience vs. poison)" }
       ],
       traits: [
@@ -121,7 +121,7 @@ export const DND_DATA = {
       name: "Tiefling",
       icon: "T",
       tagline: "Infernal heritage, iron will",
-      description: "Bearing horns, a tail, and glowing eyes as marks of their infernal bloodline, tieflings face distrust—but wield innate magical power and formidable charisma.",
+      description: "Bearing horns, a tail, and glowing eyes as marks of their infernal bloodline, tieflings face distrust, but wield innate magical power and formidable charisma.",
       statBonuses: { INT: 1, CHA: 2 },
       traits: [
         { name: "Darkvision", desc: "60 ft darkvision." },
@@ -157,7 +157,7 @@ export const DND_DATA = {
       statBonuses: { INT: 2 },
       subRaces: [
         { name: "Forest Gnome", bonuses: { DEX: 1 }, extra: "Speak with small animals; Minor Illusion cantrip" },
-        { name: "Rock Gnome", bonuses: { CON: 1 }, extra: "Artificer's Lore, Tinker—create small gadgets" }
+        { name: "Rock Gnome", bonuses: { CON: 1 }, extra: "Artificer's Lore, Tinker: create small gadgets" }
       ],
       traits: [
         { name: "Darkvision", desc: "60 ft darkvision." },
@@ -216,7 +216,7 @@ export const DND_DATA = {
       name: "Rogue",
       icon: "◆",
       tagline: "Cunning striker and infiltrator",
-      description: "Rogues rely on skill, stealth, and their foes' vulnerabilities to deal precise, devastating blows—then escape unseen. Masters of out-of-combat utility too.",
+      description: "Rogues rely on skill, stealth, and their foes' vulnerabilities to deal precise, devastating blows, then escape unseen. Masters of out-of-combat utility too.",
       hitDie: "d8",
       primaryAbility: ["DEX"],
       savingThrows: ["DEX", "INT"],
@@ -279,7 +279,7 @@ export const DND_DATA = {
       name: "Cleric",
       icon: "✛",
       tagline: "Divine champion and healer",
-      description: "Clerics are powerful divine spellcasters who serve their deity. They can heal, buff, debuff, and wear heavy armor—often the backbone of any party.",
+      description: "Clerics are powerful divine spellcasters who serve their deity. They can heal, buff, debuff, and wear heavy armor, often the backbone of any party.",
       hitDie: "d8",
       primaryAbility: ["WIS"],
       savingThrows: ["WIS", "CHA"],
@@ -361,7 +361,7 @@ export const DND_DATA = {
       name: "Monk",
       icon: "◈",
       tagline: "Disciplined martial artist",
-      description: "Monks channel their inner Ki to perform extraordinary feats. Fast, mobile, and deadly with their fists—they don't need weapons or armor.",
+      description: "Monks channel their inner Ki to perform extraordinary feats. Fast, mobile, and deadly with their fists. They don't need weapons or armor.",
       hitDie: "d8",
       primaryAbility: ["DEX", "WIS"],
       savingThrows: ["STR", "DEX"],
@@ -382,14 +382,14 @@ export const DND_DATA = {
       name: "Sorcerer",
       icon: "✧",
       tagline: "Innate magic, raw power",
-      description: "Sorcerers have magic in their blood—they don't learn it, they are born with it. They cast fewer spells than wizards but can manipulate them with Metamagic.",
+      description: "Sorcerers have magic in their blood. They don't learn it, they are born with it. They cast fewer spells than wizards but can manipulate them with Metamagic.",
       hitDie: "d6",
       primaryAbility: ["CHA"],
       savingThrows: ["CON", "CHA"],
       armorProf: "None",
       weaponProf: "Daggers, darts, slings, quarterstaffs, light crossbows",
       keyFeatures: [
-        { level: 1, name: "Spellcasting (CHA)", desc: "Spells are innate—no spellbook. Charisma is your spellcasting ability." },
+        { level: 1, name: "Spellcasting (CHA)", desc: "Spells are innate. No spellbook. Charisma is your spellcasting ability." },
         { level: 1, name: "Sorcerous Origin", desc: "Choose your bloodline: Draconic, Wild Magic, Divine Soul, Storm, Shadow, etc." },
         { level: 2, name: "Font of Magic / Sorcery Points", desc: "Pool of sorcery points = your level. Convert to/from spell slots or fuel Metamagic." },
         { level: 3, name: "Metamagic", desc: "Modify spells: Twinned, Quickened, Heightened, Subtle, Distant, Empowered, Extended, Careful." }
@@ -402,7 +402,7 @@ export const DND_DATA = {
       name: "Warlock",
       icon: "◬",
       tagline: "Pact-bound power from beyond",
-      description: "Warlocks gain magic through a pact with an otherworldly patron. They have few spell slots but regain them on short rests—plus powerful Eldritch Invocations.",
+      description: "Warlocks gain magic through a pact with an otherworldly patron. They have few spell slots but regain them on short rests, plus powerful Eldritch Invocations.",
       hitDie: "d8",
       primaryAbility: ["CHA"],
       savingThrows: ["WIS", "CHA"],
@@ -411,7 +411,7 @@ export const DND_DATA = {
       keyFeatures: [
         { level: 1, name: "Otherworldly Patron", desc: "Choose your patron: The Fiend, The Great Old One, The Archfey, The Celestial, etc." },
         { level: 1, name: "Pact Magic (CHA)", desc: "1-2 spell slots (max level) that recharge on short rest. Charisma is your spellcasting ability." },
-        { level: 2, name: "Eldritch Invocations", desc: "Gain magical boons—e.g. see in darkness, use Eldritch Blast at-will for big damage, fly, etc." },
+        { level: 2, name: "Eldritch Invocations", desc: "Gain magical boons, e.g. see in darkness, use Eldritch Blast at-will for big damage, fly, etc." },
         { level: 3, name: "Pact Boon", desc: "Choose: Pact of the Blade (weapon), Chain (familiar), or Tome (cantrips + rituals)." }
       ],
       difficulty: "Intermediate", role: "Blaster / Utility / Control",
@@ -504,7 +504,7 @@ export const DND_DATA = {
       abbr: "CHA",
       color: "#6b3a8b",
       icon: "♪",
-      description: "Force of personality and social grace. Essential for Bards, Paladins, Sorcerers, and Warlocks—and for any character who talks their way out of trouble.",
+      description: "Force of personality and social grace. Essential for Bards, Paladins, Sorcerers, and Warlocks. Also key for any character who talks their way out of trouble.",
       uses: [
         "Bard, Paladin, Sorcerer, and Warlock spellcasting",
         "Persuasion, Deception, Intimidation, Performance",
@@ -523,7 +523,7 @@ export const DND_DATA = {
 
     { name: "Magic Missile", level: 1, school: "Evocation", castingTime: "1 action", range: "120 ft", components: "V, S", duration: "Instant", classes: ["Wizard","Sorcerer"], desc: "Create 3 darts of magical force. Each dart hits automatically for 1d4+1 force damage. Upcasting adds more darts.",
       roll: { type: "auto", damage: "1d4+1 per dart × 3", upcast: "+1 dart per slot above 1st" },
-      diceNote: "No attack roll needed — darts hit automatically. Roll 1d4+1 for each of the 3 darts (or roll 3d4+3 total)." },
+      diceNote: "No attack roll needed. Darts hit automatically. Roll 1d4+1 for each of the 3 darts (or roll 3d4+3 total)." },
 
     { name: "Thunderwave", level: 1, school: "Evocation", castingTime: "1 action", range: "Self (15-ft cube)", components: "V, S", duration: "Instant", classes: ["Wizard","Druid","Bard","Sorcerer"], desc: "A wave of thunder blasts out. Each creature in a 15-ft cube takes 2d8 thunder damage (CON save for half) and is pushed 10 ft.",
       roll: { type: "save", save: "CON", damage: "2d8 thunder", upcast: "+1d8 per slot above 1st" },
@@ -535,7 +535,7 @@ export const DND_DATA = {
 
     { name: "Healing Word", level: 1, school: "Evocation", castingTime: "1 bonus action", range: "60 ft", components: "V", duration: "Instant", classes: ["Cleric","Druid","Bard"], desc: "Restore 1d4 + spellcasting modifier HP to a creature you can see. Can be cast as a bonus action.",
       roll: { type: "heal", healing: "1d4 + spell mod", upcast: "+1d4 per slot above 1st" },
-      diceNote: "Roll 1d4 + your spellcasting modifier. Great for picking up downed allies — costs only a Bonus Action." },
+      diceNote: "Roll 1d4 + your spellcasting modifier. Great for picking up downed allies. Costs only a Bonus Action." },
 
     { name: "Counterspell", level: 3, school: "Abjuration", castingTime: "1 reaction", range: "60 ft", components: "S", duration: "Instant", classes: ["Wizard","Sorcerer","Warlock"], desc: "Interrupt a spell being cast. Automatically cancels spells of level 3 or lower; higher level spells require an ability check.",
       roll: { type: "conditional", note: "Only if target spell is 4th level+" },
@@ -543,7 +543,7 @@ export const DND_DATA = {
 
     { name: "Shield", level: 1, school: "Abjuration", castingTime: "1 reaction", range: "Self", components: "V, S", duration: "1 round", classes: ["Wizard","Sorcerer"], desc: "React to an incoming attack to gain +5 AC until your next turn (potentially causing the attack to miss).",
       roll: { type: "buff", effect: "+5 AC" },
-      diceNote: "No roll. Trigger when targeted by an attack — +5 AC applies retroactively, so it can turn a hit into a miss." },
+      diceNote: "No roll. Trigger when targeted by an attack. The +5 AC applies retroactively, so it can turn a hit into a miss." },
 
     { name: "Misty Step", level: 2, school: "Conjuration", castingTime: "1 bonus action", range: "Self", components: "V", duration: "Instant", classes: ["Wizard","Sorcerer","Warlock","Paladin"], desc: "Teleport up to 30 ft to an unoccupied space you can see. Fast, reliable short-range teleportation.",
       roll: { type: "utility", effect: "30 ft teleport" },
@@ -559,7 +559,7 @@ export const DND_DATA = {
 
     { name: "Speak with Dead", level: 3, school: "Necromancy", castingTime: "1 action", range: "10 ft", components: "V, S, M", duration: "10 minutes", classes: ["Cleric","Bard"], desc: "Grant limited speech to a corpse. Ask up to 5 questions; the spirit only knows what it knew in life.",
       roll: { type: "utility", effect: "5 questions" },
-      diceNote: "No roll. The corpse can refuse or lie — the DM roleplays the spirit's answers." },
+      diceNote: "No roll. The corpse can refuse or lie. The DM roleplays the spirit's answers." },
 
     { name: "Detect Magic", level: 1, school: "Divination", castingTime: "1 action (ritual)", range: "Self (30 ft)", components: "V, S", duration: "Concentration, 10 min", classes: ["Wizard","Cleric","Druid","Bard","Paladin","Ranger","Sorcerer","Warlock"], desc: "Sense the presence of magic within 30 ft. You can see a faint aura around magical objects and learn the school of magic.",
       roll: { type: "utility", effect: "Detects magic 30 ft" },
@@ -583,12 +583,12 @@ export const DND_DATA = {
         { name: "Dash", type: "Action", desc: "Double your movement speed for the turn by using your action to sprint.", example: "Sprint 60 ft to reach a fleeing enemy." },
         { name: "Disengage", type: "Action", desc: "Your movement doesn't provoke opportunity attacks for the rest of the turn.", example: "Safely back away from an enemy without getting hit." },
         { name: "Dodge", type: "Action", desc: "Until your next turn, all attack rolls against you have disadvantage, and you have advantage on DEX saves.", example: "Focus on avoiding attacks while allies deal damage." },
-        { name: "Help", type: "Action", desc: "Aid an ally in attacking a creature or performing a task—the ally gains advantage on their next roll.", example: "Distract an enemy so your rogue friend has advantage." },
-        { name: "Hide", type: "Action", dice: ["1d20 + DEX (Stealth)"], diceNote: "Roll 1d20 + DEX modifier + proficiency (if Stealth-proficient). Compare to enemies' Passive Perception or a contested check.", desc: "Make a Stealth check. If successful, you're hidden—attacks against you have disadvantage and you can attack with advantage.", example: "Duck behind a pillar and prepare to ambush." },
+        { name: "Help", type: "Action", desc: "Aid an ally in attacking a creature or performing a task. The ally gains advantage on their next roll.", example: "Distract an enemy so your rogue friend has advantage." },
+        { name: "Hide", type: "Action", dice: ["1d20 + DEX (Stealth)"], diceNote: "Roll 1d20 + DEX modifier + proficiency (if Stealth-proficient). Compare to enemies' Passive Perception or a contested check.", desc: "Make a Stealth check. If successful, you're hidden. Attacks against you have disadvantage and you can attack with advantage.", example: "Duck behind a pillar and prepare to ambush." },
         { name: "Ready", type: "Action", desc: "Prepare an action to trigger under specific conditions. Set a trigger and a reaction to execute when it occurs.", example: "Ready to shoot the enemy the moment it opens the door." },
         { name: "Search", type: "Action", dice: ["1d20 + WIS/INT"], diceNote: "Roll 1d20 + WIS (Perception) to notice something, or + INT (Investigation) to deduce something. Add proficiency if applicable.", desc: "Make a Perception or Investigation check to find something.", example: "Search the room for traps or secret doors." },
         { name: "Use an Object", type: "Action", desc: "Interact with a second object on your turn (first is free), or use an item that requires more care.", example: "Drink a potion or pick a lock." },
-        { name: "Grapple", type: "Action (Attack)", dice: ["contested 1d20"], diceNote: "You roll 1d20 + STR (Athletics) vs. target's 1d20 + STR (Athletics) or DEX (Acrobatics)—their choice. Higher total wins.", desc: "Use one of your attacks to grapple a creature (STR Athletics vs. opponent's Athletics or Acrobatics). Grappled creatures have 0 speed.", example: "Grab an enemy to hold them in place." },
+        { name: "Grapple", type: "Action (Attack)", dice: ["contested 1d20"], diceNote: "You roll 1d20 + STR (Athletics) vs. target's 1d20 + STR (Athletics) or DEX (Acrobatics), their choice. Higher total wins.", desc: "Use one of your attacks to grapple a creature (STR Athletics vs. opponent's Athletics or Acrobatics). Grappled creatures have 0 speed.", example: "Grab an enemy to hold them in place." },
         { name: "Shove", type: "Action (Attack)", dice: ["contested 1d20"], diceNote: "You roll 1d20 + STR (Athletics) vs. target's STR (Athletics) or DEX (Acrobatics). On success, push 5 ft or knock prone.", desc: "Use one attack to push a creature 5 ft or knock it prone (STR Athletics vs. opponent's Athletics or Acrobatics).", example: "Push an enemy off a ledge or knock them down." }
       ]
     },
@@ -625,16 +625,16 @@ export const DND_DATA = {
     overview: "A round of combat in D&D lasts about 6 seconds in the game world. Every creature involved in the fight takes one turn per round, in initiative order. The round ends when everyone has acted, then a new round begins.",
     initiative: {
       title: "Initiative",
-      desc: "At the start of combat, everyone rolls 1d20 + their DEX modifier. The DM lists everyone from highest to lowest—that's the order you'll take turns in, every round, until combat ends.",
+      desc: "At the start of combat, everyone rolls 1d20 + their DEX modifier. The DM lists everyone from highest to lowest. That's the order you'll take turns in, every round, until combat ends.",
       dice: "1d20 + DEX modifier",
       tip: "Higher DEX = act sooner. Ties between PCs and monsters: the DM decides or a re-roll."
     },
     turnFlow: [
       { step: 1, name: "Decide your goal", desc: "Look at the battlefield. Who's hurting? Where are the enemies? What does your character want this round?" },
-      { step: 2, name: "Move (up to your Speed)", desc: "You can move up to your Speed in feet (most races: 30 ft). You can split this movement—move a little, attack, then move again. Difficult terrain costs double." },
+      { step: 2, name: "Move (up to your Speed)", desc: "You can move up to your Speed in feet (most races: 30 ft). You can split this movement: move a little, attack, then move again. Difficult terrain costs double." },
       { step: 3, name: "Take one Action", desc: "This is your main thing for the turn: Attack, Cast a Spell, Dash, Dodge, Hide, Help, etc. You only get ONE per turn (unless a feature like Action Surge gives more)." },
       { step: 4, name: "Maybe a Bonus Action", desc: "Only if you have a feature or spell that uses one (e.g. Rogue's Cunning Action, Healing Word, Two-Weapon Fighting). Not every turn has one." },
-      { step: 5, name: "Free Object Interaction", desc: "Once per turn, you can interact with one object for free—draw a weapon, open a door, pick up a torch. A second interaction would cost your Action (Use an Object)." },
+      { step: 5, name: "Free Object Interaction", desc: "Once per turn, you can interact with one object for free: draw a weapon, open a door, pick up a torch. A second interaction would cost your Action (Use an Object)." },
       { step: 6, name: "End your turn", desc: "Anything ongoing happens (saving throws against poison, conditions ending, etc.). Then play passes to the next person in initiative order." }
     ],
     reactionsNote: "Reactions are special: you get ONE per round, and you can use it on ANYONE's turn, including your own. Examples: Opportunity Attack when an enemy leaves your reach, Counterspell when a wizard starts casting, the Shield spell when you're hit. Once used, you can't react again until the start of your next turn.",
@@ -649,10 +649,10 @@ export const DND_DATA = {
       { q: "Can I move, then attack, then move again?", a: "Yes! You can split your movement around your Action however you like." },
       { q: "Does moving cost an Action?", a: "No. Moving up to your Speed is FREE every turn. Only sprinting beyond your Speed (the Dash action) uses your Action." },
       { q: "How far can I walk per turn?", a: "Your Speed in feet. Most races: 30 ft. Dwarves & halflings: 25 ft. Some elves: 35 ft. Dash doubles this for one turn." },
-      { q: "Can I do two Actions in one turn?", a: "Normally no. The Fighter's Action Surge feature is a notable exception—it lets you take a second Action." },
+      { q: "Can I do two Actions in one turn?", a: "Normally no. The Fighter's Action Surge feature is a notable exception. It lets you take a second Action." },
       { q: "What's the difference between an Action and a Bonus Action?", a: "An Action is your one main thing per turn. A Bonus Action is a SECONDARY thing, only available when a specific spell or class feature provides one. You can't 'spend' your Action to get a Bonus Action." },
       { q: "Can I drink a potion AND attack?", a: "Yes, but the potion uses your Action (it's a 'Use an Object'). Unless your DM rules drinking a potion as a Bonus Action (a common house rule)." },
-      { q: "What if I do nothing on my turn?", a: "You can also choose to do nothing—or use your action to Ready an action for a specific trigger." }
+      { q: "What if I do nothing on my turn?", a: "You can also choose to do nothing, or use your action to Ready an action for a specific trigger." }
     ]
   },
 
@@ -666,7 +666,7 @@ export const DND_DATA = {
       "barbarian": { synergy: 4, summary: "Bonus stats across the board keep multiple combat stats viable.", highlights: ["Variant feat: Tough for massive HP pool", "Flexibility to build STR + CON + decent WIS"] },
       "bard": { synergy: 4, summary: "Extra skills and feat give Bards the social and utility coverage they thrive on.", highlights: ["Feat: Actor or Inspiring Leader", "Most skilled character in the game"] },
       "cleric": { synergy: 4, summary: "Flexible stat boosts accommodate any Domain's needs. Extra feat for War Caster.", highlights: ["Feat: War Caster for concentration spells in heavy armor", "All-rounder for any domain"] },
-      "ranger": { synergy: 3, summary: "Solid generalist; Variant feat enhances combat specialty.", highlights: ["Feat: Sharpshooter for archer builds", "Extra skill covers wilderness and social needs"] },
+      "ranger": { synergy: 3, summary: "Solid generalist; Variant feat boosts combat specialty.", highlights: ["Feat: Sharpshooter for archer builds", "Extra skill covers wilderness and social needs"] },
       "druid": { synergy: 3, summary: "Extra stats and feat help the normally fragile druid survive.", highlights: ["Feat: War Caster for concentration spells", "Extra language useful for nature roleplay"] },
       "monk": { synergy: 4, summary: "Variant feat fills Monk's gaps; extra skill supports out-of-combat utility.", highlights: ["Feat: Mobile for even more movement", "Well-rounded for DEX + WIS balance"] },
       "sorcerer": { synergy: 3, summary: "Variant feat shores up concentration and survivability.", highlights: ["Feat: War Caster or Resilient (CON)", "Flexible for any Sorcerous Origin"] },
@@ -679,7 +679,7 @@ export const DND_DATA = {
       "ranger": { synergy: 5, summary: "Wood Elf + Ranger is a D&D classic. DEX, WIS, stealth, and speed perfectly match Ranger needs.", highlights: ["Perfect stat synergy", "Mask of the Wild for ambushes", "High Elf with Ranger spells: great arcane archer"] },
       "cleric": { synergy: 3, summary: "Elf Clerics are uncommon but functional, especially with Wood Elf WIS bonus.", highlights: ["Wood Elf: WIS for spellcasting", "Fey Ancestry protects the squishy divine caster"] },
       "druid": { synergy: 4, summary: "Wood Elf WIS + nature theme = a thematic and powerful Druid.", highlights: ["WIS for spellcasting", "Mask of the Wild for natural stealth", "Speed bonus helps the often-slow druid"] },
-      "monk": { synergy: 4, summary: "DEX + WIS (High Elf INT or Wood Elf WIS) both feed Monk. Fey Ancestry adds charm immunity.", highlights: ["High speed works great with Monk movement", "Unarmored Defense needs DEX + WIS—Elf provides both"] },
+      "monk": { synergy: 4, summary: "DEX + WIS (High Elf INT or Wood Elf WIS) both feed Monk. Fey Ancestry adds charm immunity.", highlights: ["High speed works great with Monk movement", "Unarmored Defense needs DEX + WIS, and Elf provides both"] },
       "bard": { synergy: 3, summary: "High Elf's cantrip adds a touch of magic to the Bard's toolkit.", highlights: ["Perception proficiency = high Passive Perception", "Free cantrip supplements Bard's spell list"] },
       "barbarian": { synergy: 2, summary: "Elves are typically more suited to finesse combat; Barbarian wants STR.", highlights: ["Works with DEX-focused Barbarian build", "Fey Ancestry protects against charm in Rage"] },
       "paladin": { synergy: 3, summary: "High Elf Paladin is a stylish arcane knight, though STR may need boosting.", highlights: ["High Elf free cantrip pairs with smite", "Charisma needs boosting; plan ASIs carefully"] },
@@ -688,14 +688,14 @@ export const DND_DATA = {
     },
     "dwarf": {
       "fighter": { synergy: 4, summary: "Mountain Dwarf STR + CON = a heavily armored tank with great HP.", highlights: ["Mountain Dwarf: armor proficiency + STR", "Dwarven Resilience for poison-heavy encounters"] },
-      "cleric": { synergy: 5, summary: "Hill Dwarf WIS + CON is the quintessential Cleric chassis—tough, wise, and divinely potent.", highlights: ["Hill Dwarf: +1 WIS + bonus HP per level", "Extra HP + CON = hardest-to-kill healer", "War Domain + heavy armor = combat cleric"] },
+      "cleric": { synergy: 5, summary: "Hill Dwarf WIS + CON is the quintessential Cleric chassis: tough, wise, and divinely potent.", highlights: ["Hill Dwarf: +1 WIS + bonus HP per level", "Extra HP + CON = hardest-to-kill healer", "War Domain + heavy armor = combat cleric"] },
       "barbarian": { synergy: 4, summary: "Mountain Dwarf STR + CON = massive HP and great attack rolls.", highlights: ["STR 2, CON 2 = best Barbarian stat boosts", "Poison resistance pairs well with reckless combat"] },
       "paladin": { synergy: 4, summary: "CON helps concentration; STR (Mountain) drives melee smites.", highlights: ["Mountain Dwarf: STR + CON + armor = tank Paladin", "Dwarven Resilience adds robustness"] },
       "wizard": { synergy: 2, summary: "Functional but CON/STR bonuses don't help Wizards much. Survivability is the main benefit.", highlights: ["CON bonus helps concentration saves", "Dwarven Resilience adds a layer of hardiness"] },
       "rogue": { synergy: 2, summary: "Dwarves have racial proficiencies that help, but speed of 25 and no DEX bonus are limiting.", highlights: ["Stone Cunning for dungeon heists", "CON bonus for survivability in tight spots"] },
-      "ranger": { synergy: 2, summary: "Functional but not optimal—Rangers want DEX and WIS more than STR.", highlights: ["Mountain Dwarf can do STR-based melee Ranger", "CON helps when concentration spells are targeted"] },
+      "ranger": { synergy: 2, summary: "Functional but not optimal. Rangers want DEX and WIS more than STR.", highlights: ["Mountain Dwarf can do STR-based melee Ranger", "CON helps when concentration spells are targeted"] },
       "monk": { synergy: 2, summary: "Dwarves don't get DEX or WIS bonuses, which are the two key stats for Monks.", highlights: ["25 ft speed is a significant handicap for Monks", "Poison resistance is always useful"] },
-      "bard": { synergy: 2, summary: "Dwarf Bards are unusual but memorable—a gruff storyteller with unusual survivability.", highlights: ["Unusual combo = memorable character", "Dwarven Resilience is a nice defensive bonus"] },
+      "bard": { synergy: 2, summary: "Dwarf Bards are unusual but memorable: a gruff storyteller with unusual survivability.", highlights: ["Unusual combo = memorable character", "Dwarven Resilience is a nice defensive bonus"] },
       "druid": { synergy: 3, summary: "Hill Dwarf WIS synergizes nicely; the metal armor restriction is moot since Druids avoid it anyway.", highlights: ["Hill Dwarf: +1 WIS for spellcasting", "CON helps druid survive Wild Shape transitions"] },
       "sorcerer": { synergy: 2, summary: "CON saves help maintain concentration but CHA is the Sorcerer's key stat.", highlights: ["CON helps Sorcerer weather concentration checks", "Resilient personality archetype"] },
       "warlock": { synergy: 2, summary: "Thematic oddity; CON helps, but the key Warlock stat is CHA.", highlights: ["CON saves useful for concentration", "Unusual theme with any patron"] }
@@ -708,7 +708,7 @@ export const DND_DATA = {
       "druid": { synergy: 3, summary: "Stout CON bonus helps concentration; Lucky shores up Wild Shape saves.", highlights: ["Stout: CON bonus helps druid spells", "Lucky: re-roll bad concentration saves"] },
       "ranger": { synergy: 3, summary: "DEX and Lucky make for a reliable archer ranger.", highlights: ["Lucky: consistent ranged attacks", "Small size works fine with bows"] },
       "wizard": { synergy: 2, summary: "INT is not boosted, but Lucky and Brave add great defensive value.", highlights: ["Lucky: re-roll critical concentration saves", "Brave: resist fear effects in dangerous situations"] },
-      "cleric": { synergy: 2, summary: "Functional but not optimal—Clerics want WIS primarily.", highlights: ["Stout: CON helps concentration and HP", "Lucky: safety net for key saves"] },
+      "cleric": { synergy: 2, summary: "Functional but not optimal. Clerics want WIS primarily.", highlights: ["Stout: CON helps concentration and HP", "Lucky: safety net for key saves"] },
       "sorcerer": { synergy: 3, summary: "Lightfoot CHA + Lucky = surprisingly capable Sorcerer.", highlights: ["Lucky: never critically miscast", "Lightfoot CHA bonus helps social sorcery"] },
       "warlock": { synergy: 3, summary: "Lightfoot CHA + Lucky = a compact but capable Warlock.", highlights: ["CHA boost from Lightfoot", "Lucky: reliable Eldritch Blast hits"] },
       "paladin": { synergy: 2, summary: "Halfling size works against heavy weapon Paladins, but a DEX Paladin (finesse sword) is viable.", highlights: ["Lucky: never miss a Smite attack", "CHA boost (Lightfoot) for spellcasting and aura"] },
@@ -726,18 +726,18 @@ export const DND_DATA = {
       "druid": { synergy: 3, summary: "Flexible +1 in WIS + nature-adjacent traits make for a serviceable Druid.", highlights: ["WIS boost for spellcasting", "Two extra skills for wilderness utility"] },
       "barbarian": { synergy: 2, summary: "CHA doesn't help Barbarians much, but flexible +1s can boost STR and CON.", highlights: ["Boost STR and CON; use CHA for roleplay", "Unusual combination with strong narrative potential"] },
       "monk": { synergy: 3, summary: "Flexible +1s for DEX + WIS is ideal Monk territory; two extra skills add utility.", highlights: ["Boost DEX + WIS, both key Monk stats", "Skills complement Monk's martial philosophy"] },
-      "ranger": { synergy: 4, summary: "Flexible +1s for DEX + WIS, two skills covering tracking and survival—strong Ranger chassis.", highlights: ["DEX + WIS both key for Ranger", "Two skills fill wilderness proficiency gaps"] }
+      "ranger": { synergy: 4, summary: "Flexible +1s for DEX + WIS, two skills covering tracking and survival: a strong Ranger chassis.", highlights: ["DEX + WIS both key for Ranger", "Two skills fill wilderness proficiency gaps"] }
     },
     "half-orc": {
       "barbarian": { synergy: 5, summary: "STR + CON + Relentless Endurance + Savage Attacks = the most fearsome Barbarian combo.", highlights: ["Savage Attacks: crit damage pairs with Reckless Attack", "Relentless Endurance: survive from 0 HP once per rest", "+2 STR +1 CON matches Barbarian perfectly"] },
       "fighter": { synergy: 5, summary: "STR + CON + Savage Attacks make Half-Orc Fighter a brutal, hard-hitting frontliner.", highlights: ["Savage Attacks with Champion crits = explosive damage", "Relentless Endurance makes you nearly unkillable", "Menacing adds out-of-combat utility"] },
-      "paladin": { synergy: 4, summary: "STR drives melee attacks, Savage Attacks enhance smite crits, and Relentless Endurance extends your paladin life.", highlights: ["Smite + Savage Attacks on crit = massive burst damage", "Relentless Endurance as additional near-death save"] },
+      "paladin": { synergy: 4, summary: "STR drives melee attacks, Savage Attacks boost smite crits, and Relentless Endurance extends your paladin life.", highlights: ["Smite + Savage Attacks on crit = massive burst damage", "Relentless Endurance as additional near-death save"] },
       "ranger": { synergy: 3, summary: "Melee ranger benefits from STR; Relentless Endurance is a great safety net.", highlights: ["STR-based melee Ranger (Revised/Hunters)", "Menacing for Intimidation-based wilderness encounters"] },
       "cleric": { synergy: 3, summary: "War Cleric or Life Cleric can use STR for a melee combat role.", highlights: ["War Cleric: STR attacks + Relentless Endurance", "Menacing adds intimidation utility for a tough divine warrior"] },
       "monk": { synergy: 2, summary: "DEX and WIS are Monk stats; STR doesn't help. Relentless Endurance is the saving grace.", highlights: ["Relentless Endurance: useful given Monk's lower HP", "Not a natural fit but survivable"] },
       "rogue": { synergy: 2, summary: "Menacing (Intimidation) adds an interesting social angle; STR-based Rogue is uncommon but viable.", highlights: ["Menacing complements an Intimidation-focused build", "Relentless Endurance keeps the rogue from dying mid-heist"] },
       "wizard": { synergy: 1, summary: "STR and CON bonuses don't help Wizards directly. Survivability is the only gain.", highlights: ["Relentless Endurance gives a Wizard one free near-death save", "Thematic: Orc scholar archetype"] },
-      "bard": { synergy: 2, summary: "Menacing Bard is a fun archetype—Intimidation proficiency + Charisma is a powerful combo.", highlights: ["Menacing: doubles down on Bard's Charisma skills", "Intimidation Bard: frighten enemies with performance"] },
+      "bard": { synergy: 2, summary: "Menacing Bard is a fun archetype: Intimidation proficiency + Charisma is a powerful combo.", highlights: ["Menacing: doubles down on Bard's Charisma skills", "Intimidation Bard: frighten enemies with performance"] },
       "sorcerer": { synergy: 2, summary: "CON helps concentration; Relentless Endurance gives the fragile Sorcerer a safety net.", highlights: ["CON bonus: great for Sorcerer concentration saves", "Relentless Endurance compensates for low Sorcerer HP"] },
       "warlock": { synergy: 2, summary: "A Hexblade Warlock can use STR instead of CHA for attacks (via Hexblade's Curse mechanic).", highlights: ["STR Hexblade is a viable melee Warlock build", "Relentless Endurance excellent for front-line Warlock"] },
       "druid": { synergy: 2, summary: "Wild Shape tanks can use the Relentless Endurance indirectly; WIS is still needed.", highlights: ["Relentless Endurance in beast form can be dramatic", "Thematic: Half-Orc nature shaman"] }
@@ -748,7 +748,7 @@ export const DND_DATA = {
       "bard": { synergy: 4, summary: "+2 CHA + Darkvision + infernal flavor makes for an unforgettable College of Whispers Bard.", highlights: ["+2 CHA for Inspiration and Spells", "College of Whispers: thematic dark performer", "Darkvision: always see the audience"] },
       "paladin": { synergy: 4, summary: "Oathbreaker Paladin + Tiefling = the iconic anti-hero. CHA boosts both Smite spells and Aura.", highlights: ["+2 CHA for Aura of Protection and Divine Smite slots", "+1 INT for Eldritch Strike if multiclassing", "Oathbreaker/Vengeance theme is a perfect fit"] },
       "rogue": { synergy: 3, summary: "Arcane Trickster can exploit Tiefling spells. Darkvision helps stealth greatly.", highlights: ["+1 INT for Arcane Trickster spellcasting", "Darkvision for stealth in dim environments", "Hellish Rebuke as reaction is great for Rogues"] },
-      "wizard": { synergy: 3, summary: "+1 INT helps; Darkvision and innate spells give a Wizard more tools and survivability.", highlights: ["+1 INT bonus to spellcasting", "Infernal Legacy = extra spells without slots", "Thematic: a wizard who delves into forbidden knowledge"] },
+      "wizard": { synergy: 3, summary: "+1 INT helps; Darkvision and innate spells give a Wizard more tools and survivability.", highlights: ["+1 INT bonus to spellcasting", "Infernal Legacy = extra spells without slots", "Thematic: a wizard who digs into forbidden knowledge"] },
       "fighter": { synergy: 2, summary: "Eldritch Knight can use the +1 INT; CHA helps social situations.", highlights: ["+1 INT for Eldritch Knight build", "Hellish Rebuke as a magical counterattack"] },
       "cleric": { synergy: 3, summary: "The tension between infernal heritage and divine calling is compelling. Trickery or Death domain fits.", highlights: ["Innate fire spells complement certain domains", "Darkvision for dungeon clerics"] },
       "barbarian": { synergy: 2, summary: "INT and CHA don't benefit Barbarians, but fire resistance stacks with Rage for incredible fire tanking.", highlights: ["Fire resistance + Rage physical resistance = extreme tank vs fire", "Thematic: rage-fueled infernal warrior"] },
@@ -776,7 +776,7 @@ export const DND_DATA = {
       "bard": { synergy: 4, summary: "Forest Gnome CHA + Gnome Cunning = a quick-witted Bard who laughs off magical effects.", highlights: ["+2 INT + Forest Gnome DEX for a nimble performer", "Gnome Cunning: resist almost any enchantment", "Minor Illusion cantrip augments Bard illusion toolkit"] },
       "cleric": { synergy: 3, summary: "Rock Gnome CON + INT doesn't align with WIS-based Clerics, but Gnome Cunning is a great defensive bonus.", highlights: ["Gnome Cunning protects the squishy Cleric", "Unusual combination with strong flavor (tinker-priest)"] },
       "rogue": { synergy: 3, summary: "Forest Gnome DEX + Minor Illusion + Gnome Cunning = a sneaky, magically-resistant Arcane Trickster.", highlights: ["Forest Gnome: DEX for sneak attack", "Minor Illusion: create free distractions for Sneak Attack"] },
-      "druid": { synergy: 3, summary: "Forest Gnome speaks with animals natively—a perfect nature thematic. Gnome Cunning adds magical defense.", highlights: ["Forest Gnome: Speak with Animals + WIS for spells", "Thematic overlap with nature domain"] },
+      "druid": { synergy: 3, summary: "Forest Gnome speaks with animals natively, a great thematic fit. Gnome Cunning adds magical defense.", highlights: ["Forest Gnome: Speak with Animals + WIS for spells", "Thematic overlap with nature domain"] },
       "monk": { synergy: 2, summary: "INT doesn't help Monks directly but Gnome Cunning protects against magical stunning.", highlights: ["Gnome Cunning protects against WIS/INT/CHA saves", "Small size = nimble but DEX is more important than INT"] },
       "fighter": { synergy: 2, summary: "Gnome Cunning helps in magical combat; INT can power an Eldritch Knight.", highlights: ["Eldritch Knight: INT bonus directly useful", "Gnome Cunning makes you resilient against spellcasters"] },
       "sorcerer": { synergy: 2, summary: "INT bonus doesn't fuel Sorcerer (needs CHA), but Gnome Cunning is excellent for the fragile Sorcerer.", highlights: ["Gnome Cunning: best magical defense in the game", "Darkvision: see and cast spells in the dark"] },

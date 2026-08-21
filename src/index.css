@@ -91,7 +91,7 @@ a:hover { color: var(--text); }
 }
 
 /* ══════════════════════════════════════════════════════
-   Desktop layout — rendered at widths above 768px
+   Desktop layout: rendered at widths above 768px
    Renders #sidebar + #main directly as row-flex children of #root.
    ══════════════════════════════════════════════════════ */
 
@@ -119,7 +119,7 @@ a:hover { color: var(--text); }
 #sidebar #theme-toggle svg { width: 16px; height: 16px; }
 
 /* ══════════════════════════════════════════════════════
-   Mobile layout — rendered at widths 768px and below
+   Mobile layout: rendered at widths 768px and below
    .mobile-shell is the single column-flex child of #root.
    ══════════════════════════════════════════════════════ */
 

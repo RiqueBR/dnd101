@@ -69,7 +69,7 @@ export const RaceCard = ({ race, onClick, isSelected }) => {
             <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{t.desc}</span>
           </div>
         ))}
-        {race.traits.length > 2 && <div style={{ fontSize: 10, color: 'var(--text-muted)', fontStyle: 'italic', marginTop: 3 }}>+{race.traits.length - 2} more traits — click to expand</div>}
+        {race.traits.length > 2 && <div style={{ fontSize: 10, color: 'var(--text-muted)', fontStyle: 'italic', marginTop: 3 }}>+{race.traits.length - 2} more traits, click to expand</div>}
       </div>
     </div>
   );
@@ -192,7 +192,7 @@ export const DetailPanel = ({ item, type, onClose }) => {
             <div><strong style={{ color: 'var(--text)' }}>Armor: </strong>{item.armorProf}</div>
             <div><strong style={{ color: 'var(--text)' }}>Weapons: </strong>{item.weaponProf}</div>
           </div>
-          <Label>Key Features (Levels 1–5)</Label>
+          <Label>Key Features (Levels 1-5)</Label>
           <div style={{ display: 'grid', gap: 7 }}>
             {item.keyFeatures.map(f => (
               <div key={f.name} style={{ background: 'var(--surface2)', border: '1px solid var(--border)', borderRadius: 6, padding: '11px 14px', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
