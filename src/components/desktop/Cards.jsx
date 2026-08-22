@@ -1,215 +1,564 @@
-import { useState } from 'react';
-import { DIFFICULTY_COLORS } from '../../data/classDisplay.js';
+import styled from 'styled-components';
+import { difficultyColors } from '../../styles/tokens.js';
 
-export const Label = ({ children }) => (
-  <div style={{ fontFamily: 'var(--font-heading)', color: 'var(--accent)', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8, marginTop: 4 }}>
-    {children}
-  </div>
-);
+export const Label = styled.div`
+  font-family: var(--font-heading);
+  color: var(--accent);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  margin-top: 4px;
+`;
+
+const StatBadgeWrap = styled.div`
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--accent);
+  font-family: monospace;
+  letter-spacing: 0.05em;
+`;
+
+const StatName = styled.span`
+  color: var(--text-muted);
+  font-size: 10px;
+`;
 
 export const StatBadge = ({ stat, value }) => (
-  <div style={{
-    display: 'inline-flex', alignItems: 'center', gap: 4,
-    padding: '2px 8px', borderRadius: 4, fontSize: 11, fontWeight: 600,
-    background: 'var(--surface2)', border: '1px solid var(--border)',
-    color: 'var(--accent)', fontFamily: 'monospace', letterSpacing: '0.05em'
-  }}>
-    <span style={{ color: 'var(--text-muted)', fontSize: 10 }}>{stat}</span>
+  <StatBadgeWrap>
+    <StatName>{stat}</StatName>
     <span>+{value}</span>
-  </div>
+  </StatBadgeWrap>
 );
 
-export const DifficultyBadge = ({ level }) => {
-  const c = DIFFICULTY_COLORS[level] || '#888';
-  return (
-    <span style={{
-      padding: '2px 8px', borderRadius: 4, fontSize: 10, fontWeight: 700,
-      textTransform: 'uppercase', letterSpacing: '0.1em',
-      background: c + '28', color: c, border: `1px solid ${c}44`
-    }}>{level}</span>
-  );
-};
+const DifficultyWrap = styled.span`
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: ${(p) => p.$color}28;
+  color: ${(p) => p.$color};
+  border: 1px solid ${(p) => p.$color}44;
+`;
 
-export const RaceCard = ({ race, onClick, isSelected }) => {
-  const [hov, setHov] = useState(false);
-  return (
-    <div onClick={() => onClick(race)}
-      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
-      style={{
-        background: 'var(--surface)',
-        border: `1px solid ${isSelected ? 'var(--accent)' : hov ? 'var(--border-hover)' : 'var(--border)'}`,
-        borderTop: `3px solid ${isSelected ? 'var(--accent)' : race.color}`,
-        borderRadius: 8, padding: '18px 20px', cursor: 'pointer',
-        transition: 'all 0.2s ease',
-        transform: hov ? 'translateY(-2px)' : 'none',
-        boxShadow: hov ? `0 8px 24px ${race.color}1a` : 'none',
-      }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
-        <div>
-          <div style={{ fontSize: 15, fontWeight: 700, fontFamily: 'var(--font-heading)', color: 'var(--text)', letterSpacing: '0.04em' }}>{race.name}</div>
-          <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2, fontStyle: 'italic' }}>{race.tagline}</div>
-        </div>
-        <div style={{
-          width: 34, height: 34, borderRadius: 6, background: race.color + '1a',
-          border: `1px solid ${race.color}44`, display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: 11, color: race.color, flexShrink: 0
-        }}>{race.icon}</div>
-      </div>
-      <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginBottom: 8 }}>
-        {Object.entries(race.statBonuses).map(([s, v]) => <StatBadge key={s} stat={s} value={v} />)}
-        {race.extraBonuses && <span style={{ fontSize: 10, color: 'var(--text-muted)', alignSelf: 'center', fontStyle: 'italic' }}>{race.extraBonuses}</span>}
-      </div>
-      <div style={{ display: 'flex', gap: 12, marginBottom: 10, fontSize: 11, color: 'var(--text-muted)' }}>
-        <span>Size: {race.size}</span><span>Speed: {race.speed} ft</span>
-      </div>
-      <div style={{ borderTop: '1px solid var(--border)', paddingTop: 10 }}>
-        {race.traits.slice(0, 2).map(t => (
-          <div key={t.name} style={{ marginBottom: 5 }}>
-            <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--accent)', fontFamily: 'var(--font-heading)' }}>{t.name}. </span>
-            <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{t.desc}</span>
-          </div>
-        ))}
-        {race.traits.length > 2 && <div style={{ fontSize: 10, color: 'var(--text-muted)', fontStyle: 'italic', marginTop: 3 }}>+{race.traits.length - 2} more traits, click to expand</div>}
-      </div>
-    </div>
-  );
-};
+export const DifficultyBadge = ({ level }) => (
+  <DifficultyWrap $color={difficultyColors[level] || '#888'}>{level}</DifficultyWrap>
+);
 
-export const ClassCard = ({ cls, onClick, isSelected }) => {
-  const [hov, setHov] = useState(false);
-  return (
-    <div onClick={() => onClick(cls)}
-      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
-      style={{
-        background: 'var(--surface)',
-        border: `1px solid ${isSelected ? 'var(--accent)' : hov ? 'var(--border-hover)' : 'var(--border)'}`,
-        borderTop: `3px solid ${isSelected ? 'var(--accent)' : cls.color}`,
-        borderRadius: 8, padding: '18px 20px', cursor: 'pointer',
-        transition: 'all 0.2s ease',
-        transform: hov ? 'translateY(-2px)' : 'none',
-        boxShadow: hov ? `0 8px 24px ${cls.color}1a` : 'none',
-      }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
-        <div>
-          <div style={{ fontSize: 15, fontWeight: 700, fontFamily: 'var(--font-heading)', color: 'var(--text)', letterSpacing: '0.04em' }}>{cls.name}</div>
-          <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 2, fontStyle: 'italic' }}>{cls.tagline}</div>
-        </div>
-        <div style={{
-          width: 34, height: 34, borderRadius: 6, background: cls.color + '1a',
-          border: `1px solid ${cls.color}44`, display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: 14, color: cls.color, flexShrink: 0
-        }}>{cls.icon}</div>
+const CardWrap = styled.div`
+  background: var(--surface);
+  border: 1px solid ${(p) => (p.$selected ? 'var(--accent)' : 'var(--border)')};
+  border-top: 3px solid ${(p) => (p.$selected ? 'var(--accent)' : p.$color)};
+  border-radius: 8px;
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: ${(p) => (p.$selected ? 'var(--accent)' : 'var(--border-hover)')};
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px ${(p) => p.$color}1a;
+  }
+`;
+
+const CardHeaderRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+`;
+
+const CardName = styled.div`
+  font-size: 15px;
+  font-weight: 700;
+  font-family: var(--font-heading);
+  color: var(--text);
+  letter-spacing: 0.04em;
+`;
+
+const CardTagline = styled.div`
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+  font-style: italic;
+`;
+
+const RaceIconBadge = styled.div`
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  background: ${(p) => p.$color}1a;
+  border: 1px solid ${(p) => p.$color}44;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 11px;
+  color: ${(p) => p.$color};
+  flex-shrink: 0;
+`;
+
+const ClassIconBadge = styled.div`
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  background: ${(p) => p.$color}1a;
+  border: 1px solid ${(p) => p.$color}44;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: ${(p) => p.$color};
+  flex-shrink: 0;
+`;
+
+const StatRow = styled.div`
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+`;
+
+const ExtraBonusText = styled.span`
+  font-size: 10px;
+  color: var(--text-muted);
+  align-self: center;
+  font-style: italic;
+`;
+
+const MetaRow = styled.div`
+  display: flex;
+  gap: 12px;
+  margin-bottom: 10px;
+  font-size: 11px;
+  color: var(--text-muted);
+`;
+
+const TraitsBlock = styled.div`
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+`;
+
+const TraitRow = styled.div`
+  margin-bottom: 5px;
+`;
+
+const TraitName = styled.span`
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  font-family: var(--font-heading);
+`;
+
+const TraitDesc = styled.span`
+  font-size: 11px;
+  color: var(--text-muted);
+`;
+
+const MoreTraitsNote = styled.div`
+  font-size: 10px;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-top: 3px;
+`;
+
+export const RaceCard = ({ race, onClick, isSelected }) => (
+  <CardWrap onClick={() => onClick(race)} $selected={isSelected} $color={race.color}>
+    <CardHeaderRow>
+      <div>
+        <CardName>{race.name}</CardName>
+        <CardTagline>{race.tagline}</CardTagline>
       </div>
-      <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginBottom: 8 }}>
-        <span style={{ padding: '2px 7px', borderRadius: 4, fontSize: 10, fontWeight: 600, background: 'var(--surface2)', border: '1px solid var(--border)', color: 'var(--text-muted)', fontFamily: 'monospace' }}>HD: {cls.hitDie}</span>
-        {cls.primaryAbility.map(a => (
-          <span key={a} style={{ padding: '2px 7px', borderRadius: 4, fontSize: 10, fontWeight: 600, background: 'var(--accent-subtle)', border: '1px solid var(--accent-border)', color: 'var(--accent)', fontFamily: 'monospace' }}>{a}</span>
-        ))}
-        <DifficultyBadge level={cls.difficulty} />
+      <RaceIconBadge $color={race.color}>{race.icon}</RaceIconBadge>
+    </CardHeaderRow>
+    <StatRow>
+      {Object.entries(race.statBonuses).map(([s, v]) => <StatBadge key={s} stat={s} value={v} />)}
+      {race.extraBonuses && <ExtraBonusText>{race.extraBonuses}</ExtraBonusText>}
+    </StatRow>
+    <MetaRow>
+      <span>Size: {race.size}</span><span>Speed: {race.speed} ft</span>
+    </MetaRow>
+    <TraitsBlock>
+      {race.traits.slice(0, 2).map((t) => (
+        <TraitRow key={t.name}>
+          <TraitName>{t.name}. </TraitName>
+          <TraitDesc>{t.desc}</TraitDesc>
+        </TraitRow>
+      ))}
+      {race.traits.length > 2 && <MoreTraitsNote>+{race.traits.length - 2} more traits, click to expand</MoreTraitsNote>}
+    </TraitsBlock>
+  </CardWrap>
+);
+
+const ClassBadgeRow = styled.div`
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+`;
+
+const HDBadge = styled.span`
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-family: monospace;
+`;
+
+const AbilityBadge = styled.span`
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  background: var(--accent-subtle);
+  border: 1px solid var(--accent-border);
+  color: var(--accent);
+  font-family: monospace;
+`;
+
+const RoleText = styled.div`
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  font-style: italic;
+`;
+
+const FeatureRow = styled.div`
+  margin-bottom: 5px;
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+`;
+
+const FeatureLevel = styled.span`
+  font-size: 9px;
+  color: var(--text-muted);
+  font-family: monospace;
+  flex-shrink: 0;
+`;
+
+const FeatureName = styled.span`
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  font-family: var(--font-heading);
+`;
+
+export const ClassCard = ({ cls, onClick, isSelected }) => (
+  <CardWrap onClick={() => onClick(cls)} $selected={isSelected} $color={cls.color}>
+    <CardHeaderRow>
+      <div>
+        <CardName>{cls.name}</CardName>
+        <CardTagline>{cls.tagline}</CardTagline>
       </div>
-      <div style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 10, fontStyle: 'italic' }}>{cls.role}</div>
-      <div style={{ borderTop: '1px solid var(--border)', paddingTop: 10 }}>
-        {cls.keyFeatures.slice(0, 2).map(f => (
-          <div key={f.name} style={{ marginBottom: 5, display: 'flex', gap: 6, alignItems: 'baseline' }}>
-            <span style={{ fontSize: 9, color: 'var(--text-muted)', fontFamily: 'monospace', flexShrink: 0 }}>Lv.{f.level}</span>
-            <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--accent)', fontFamily: 'var(--font-heading)' }}>{f.name}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
+      <ClassIconBadge $color={cls.color}>{cls.icon}</ClassIconBadge>
+    </CardHeaderRow>
+    <ClassBadgeRow>
+      <HDBadge>HD: {cls.hitDie}</HDBadge>
+      {cls.primaryAbility.map((a) => <AbilityBadge key={a}>{a}</AbilityBadge>)}
+      <DifficultyBadge level={cls.difficulty} />
+    </ClassBadgeRow>
+    <RoleText>{cls.role}</RoleText>
+    <TraitsBlock>
+      {cls.keyFeatures.slice(0, 2).map((f) => (
+        <FeatureRow key={f.name}>
+          <FeatureLevel>Lv.{f.level}</FeatureLevel>
+          <FeatureName>{f.name}</FeatureName>
+        </FeatureRow>
+      ))}
+    </TraitsBlock>
+  </CardWrap>
+);
+
+const DetailWrap = styled.div`
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-top: 3px solid ${(p) => p.$color};
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 20px;
+`;
+
+const DetailHeaderRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+`;
+
+const DetailTitle = styled.h2`
+  margin: 0;
+  font-family: var(--font-heading);
+  color: var(--text);
+  font-size: 20px;
+`;
+
+const DetailTagline = styled.p`
+  margin: 4px 0 0;
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 13px;
+`;
+
+const CloseButton = styled.button`
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: 4px;
+  padding: 4px 12px;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: var(--font-heading);
+`;
+
+const DetailDescription = styled.p`
+  color: var(--text);
+  line-height: 1.7;
+  font-size: 13px;
+  margin-bottom: 16px;
+`;
+
+const SubRaceGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 8px;
+  margin-bottom: 16px;
+`;
+
+const SubRaceCard = styled.div`
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 12px;
+`;
+
+const SubRaceName = styled.div`
+  font-weight: 700;
+  font-size: 12px;
+  font-family: var(--font-heading);
+  color: var(--text);
+  margin-bottom: 5px;
+`;
+
+const SubRaceStatRow = styled.div`
+  display: flex;
+  gap: 4px;
+  margin-bottom: 5px;
+`;
+
+const SubRaceExtra = styled.div`
+  font-size: 11px;
+  color: var(--text-muted);
+  font-style: italic;
+`;
+
+const TraitsGrid = styled.div`
+  display: grid;
+  gap: 7px;
+  margin-bottom: 16px;
+`;
+
+const TraitCard = styled.div`
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 14px;
+`;
+
+const TraitCardName = styled.div`
+  font-weight: 700;
+  font-size: 12px;
+  font-family: var(--font-heading);
+  color: var(--text);
+  margin-bottom: 3px;
+`;
+
+const TraitCardDesc = styled.div`
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+`;
+
+const BestClassesRow = styled.div`
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+`;
+
+const BestClassChip = styled.span`
+  padding: 4px 12px;
+  border-radius: 4px;
+  background: var(--accent-subtle);
+  border: 1px solid var(--accent-border);
+  color: var(--accent);
+  font-size: 12px;
+  font-family: var(--font-heading);
+`;
+
+const StatGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 8px;
+  margin-bottom: 16px;
+`;
+
+const StatGridCard = styled.div`
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 9px 12px;
+`;
+
+const StatGridLabel = styled.div`
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 3px;
+`;
+
+const StatGridValue = styled.div`
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+`;
+
+const ProficiencyCard = styled.div`
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 11px 14px;
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 16px;
+`;
+
+const Strong = styled.strong`
+  color: var(--text);
+`;
+
+const FeatureGrid = styled.div`
+  display: grid;
+  gap: 7px;
+`;
+
+const FeatureCard = styled.div`
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 11px 14px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+`;
+
+const LevelBadge = styled.div`
+  min-width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  background: ${(p) => p.$color}1a;
+  border: 1px solid ${(p) => p.$color}44;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: ${(p) => p.$color};
+  font-family: monospace;
+  flex-shrink: 0;
+`;
 
 export const DetailPanel = ({ item, type, onClose }) => {
   if (!item) return null;
   const isRace = type === 'race';
   return (
-    <div style={{
-      background: 'var(--surface)', border: `1px solid var(--accent)`,
-      borderTop: `3px solid ${item.color}`, borderRadius: 8, padding: '24px', marginBottom: 20
-    }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
+    <DetailWrap $color={item.color}>
+      <DetailHeaderRow>
         <div>
-          <h2 style={{ margin: 0, fontFamily: 'var(--font-heading)', color: 'var(--text)', fontSize: 20 }}>{item.name}</h2>
-          <p style={{ margin: '4px 0 0', color: 'var(--text-muted)', fontStyle: 'italic', fontSize: 13 }}>{item.tagline}</p>
+          <DetailTitle>{item.name}</DetailTitle>
+          <DetailTagline>{item.tagline}</DetailTagline>
         </div>
-        <button onClick={onClose} style={{
-          background: 'var(--surface2)', border: '1px solid var(--border)',
-          color: 'var(--text-muted)', borderRadius: 4, padding: '4px 12px',
-          cursor: 'pointer', fontSize: 12, fontFamily: 'var(--font-heading)'
-        }}>✕ Close</button>
-      </div>
-      <p style={{ color: 'var(--text)', lineHeight: 1.7, fontSize: 13, marginBottom: 16 }}>{item.description}</p>
+        <CloseButton onClick={onClose}>✕ Close</CloseButton>
+      </DetailHeaderRow>
+      <DetailDescription>{item.description}</DetailDescription>
 
       {isRace ? (
         <>
           <Label>Ability Score Bonuses</Label>
-          <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginBottom: 16 }}>
+          <StatRow>
             {Object.entries(item.statBonuses).map(([s, v]) => <StatBadge key={s} stat={s} value={v} />)}
-          </div>
+          </StatRow>
           {item.subRaces && <>
             <Label>Subraces</Label>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 8, marginBottom: 16 }}>
-              {item.subRaces.map(sr => (
-                <div key={sr.name} style={{ background: 'var(--surface2)', border: '1px solid var(--border)', borderRadius: 6, padding: '10px 12px' }}>
-                  <div style={{ fontWeight: 700, fontSize: 12, fontFamily: 'var(--font-heading)', color: 'var(--text)', marginBottom: 5 }}>{sr.name}</div>
-                  <div style={{ display: 'flex', gap: 4, marginBottom: 5 }}>
+            <SubRaceGrid>
+              {item.subRaces.map((sr) => (
+                <SubRaceCard key={sr.name}>
+                  <SubRaceName>{sr.name}</SubRaceName>
+                  <SubRaceStatRow>
                     {Object.entries(sr.bonuses).map(([s, v]) => <StatBadge key={s} stat={s} value={v} />)}
-                  </div>
-                  <div style={{ fontSize: 11, color: 'var(--text-muted)', fontStyle: 'italic' }}>{sr.extra}</div>
-                </div>
+                  </SubRaceStatRow>
+                  <SubRaceExtra>{sr.extra}</SubRaceExtra>
+                </SubRaceCard>
               ))}
-            </div>
+            </SubRaceGrid>
           </>}
           <Label>Racial Traits</Label>
-          <div style={{ display: 'grid', gap: 7, marginBottom: 16 }}>
-            {item.traits.map(t => (
-              <div key={t.name} style={{ background: 'var(--surface2)', border: '1px solid var(--border)', borderRadius: 6, padding: '10px 14px' }}>
-                <div style={{ fontWeight: 700, fontSize: 12, fontFamily: 'var(--font-heading)', color: 'var(--text)', marginBottom: 3 }}>{t.name}</div>
-                <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.5 }}>{t.desc}</div>
-              </div>
+          <TraitsGrid>
+            {item.traits.map((t) => (
+              <TraitCard key={t.name}>
+                <TraitCardName>{t.name}</TraitCardName>
+                <TraitCardDesc>{t.desc}</TraitCardDesc>
+              </TraitCard>
             ))}
-          </div>
+          </TraitsGrid>
           <Label>Best Class Pairings</Label>
-          <div style={{ display: 'flex', gap: 7, flexWrap: 'wrap' }}>
-            {item.bestClasses.map(c => (
-              <span key={c} style={{ padding: '4px 12px', borderRadius: 4, background: 'var(--accent-subtle)', border: '1px solid var(--accent-border)', color: 'var(--accent)', fontSize: 12, fontFamily: 'var(--font-heading)' }}>{c}</span>
-            ))}
-          </div>
+          <BestClassesRow>
+            {item.bestClasses.map((c) => <BestClassChip key={c}>{c}</BestClassChip>)}
+          </BestClassesRow>
         </>
       ) : (
         <>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 8, marginBottom: 16 }}>
+          <StatGrid>
             {[['Hit Die', item.hitDie], ['Primary Stat', item.primaryAbility.join(', ')], ['Saving Throws', item.savingThrows.join(', ')], ['Difficulty', item.difficulty], ['Role', item.role]].map(([label, value]) => (
-              <div key={label} style={{ background: 'var(--surface2)', border: '1px solid var(--border)', borderRadius: 6, padding: '9px 12px' }}>
-                <div style={{ fontSize: 10, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 3 }}>{label}</div>
-                <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)' }}>{value}</div>
-              </div>
+              <StatGridCard key={label}>
+                <StatGridLabel>{label}</StatGridLabel>
+                <StatGridValue>{value}</StatGridValue>
+              </StatGridCard>
             ))}
-          </div>
+          </StatGrid>
           <Label>Proficiencies</Label>
-          <div style={{ background: 'var(--surface2)', border: '1px solid var(--border)', borderRadius: 6, padding: '11px 14px', fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.7, marginBottom: 16 }}>
-            <div><strong style={{ color: 'var(--text)' }}>Armor: </strong>{item.armorProf}</div>
-            <div><strong style={{ color: 'var(--text)' }}>Weapons: </strong>{item.weaponProf}</div>
-          </div>
+          <ProficiencyCard>
+            <div><Strong>Armor: </Strong>{item.armorProf}</div>
+            <div><Strong>Weapons: </Strong>{item.weaponProf}</div>
+          </ProficiencyCard>
           <Label>Key Features (Levels 1-5)</Label>
-          <div style={{ display: 'grid', gap: 7 }}>
-            {item.keyFeatures.map(f => (
-              <div key={f.name} style={{ background: 'var(--surface2)', border: '1px solid var(--border)', borderRadius: 6, padding: '11px 14px', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-                <div style={{
-                  minWidth: 30, height: 30, borderRadius: 4, background: item.color + '1a', border: `1px solid ${item.color}44`,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: 11, fontWeight: 700, color: item.color, fontFamily: 'monospace', flexShrink: 0
-                }}>{f.level}</div>
+          <FeatureGrid>
+            {item.keyFeatures.map((f) => (
+              <FeatureCard key={f.name}>
+                <LevelBadge $color={item.color}>{f.level}</LevelBadge>
                 <div>
-                  <div style={{ fontWeight: 700, fontSize: 12, fontFamily: 'var(--font-heading)', color: 'var(--text)', marginBottom: 3 }}>{f.name}</div>
-                  <div style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.5 }}>{f.desc}</div>
+                  <TraitCardName>{f.name}</TraitCardName>
+                  <TraitCardDesc>{f.desc}</TraitCardDesc>
                 </div>
-              </div>
+              </FeatureCard>
             ))}
-          </div>
+          </FeatureGrid>
         </>
       )}
-    </div>
+    </DetailWrap>
   );
 };
