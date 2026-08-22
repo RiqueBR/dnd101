@@ -110,10 +110,15 @@ a:hover { color: var(--text); }
   overflow-y: auto;
   padding: 32px 36px;
   min-width: 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar) transparent;
 }
-#main::-webkit-scrollbar { width: 6px; }
-#main::-webkit-scrollbar-track { background: transparent; }
-#main::-webkit-scrollbar-thumb { background: var(--scrollbar); border-radius: 3px; }
+/* Legacy fallback for browsers without the standard scrollbar-color/-width properties */
+@supports not (scrollbar-color: auto) {
+  #main::-webkit-scrollbar { width: 6px; }
+  #main::-webkit-scrollbar-track { background: transparent; }
+  #main::-webkit-scrollbar-thumb { background: var(--scrollbar); border-radius: 3px; }
+}
 
 #sidebar #theme-toggle { width: 32px; height: 32px; }
 #sidebar #theme-toggle svg { width: 16px; height: 16px; }
@@ -146,18 +151,20 @@ a:hover { color: var(--text); }
   border-bottom: 1px solid var(--bar-border);
   flex-shrink: 0;
 }
-.m-title { font-family: var(--font-heading); font-size: 19px; font-weight: 800; letter-spacing: .03em; color: var(--text); line-height: 1.1; }
-.m-sub { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+.m-title { font-family: var(--font-heading); font-size: 1.1875rem; font-weight: 800; letter-spacing: .03em; color: var(--text); line-height: 1.1; }
+.m-sub { font-size: .6875rem; color: var(--text-muted); margin-top: 1px; }
 .m-top #theme-toggle { width: 40px; height: 40px; border-radius: 9px; }
 .m-top #theme-toggle svg { width: 18px; height: 18px; }
 
 .m-scroll {
   flex: 1;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
   padding: 16px 14px calc(env(safe-area-inset-bottom) + 88px);
+  scrollbar-width: none;
 }
-.m-scroll::-webkit-scrollbar { width: 0; }
+@supports not (scrollbar-width: none) {
+  .m-scroll::-webkit-scrollbar { width: 0; }
+}
 
 .m-tabs {
   position: fixed;
@@ -185,25 +192,26 @@ a:hover { color: var(--text); }
   background: transparent;
   color: var(--text-muted);
   font-family: var(--font-heading);
-  font-size: 10.5px;
+  font-size: .65625rem;
   letter-spacing: .02em;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   transition: background .15s, color .15s;
 }
 .m-tab.active { background: var(--accent-subtle); color: var(--accent); font-weight: 700; }
-.m-tab-ico { font-size: 17px; line-height: 1; }
+.m-tab-ico { font-size: 1.0625rem; line-height: 1; }
 
 .m-hscroll {
   display: flex;
   gap: 8px;
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
   padding: 2px 14px 2px 0;
   margin: 0 -14px 0 0;
   scrollbar-width: none;
 }
-.m-hscroll::-webkit-scrollbar { display: none; }
+@supports not (scrollbar-width: none) {
+  .m-hscroll::-webkit-scrollbar { display: none; }
+}
 
 .m-sheet {
   position: fixed;
@@ -230,7 +238,9 @@ a:hover { color: var(--text); }
 .m-sheet-body {
   flex: 1;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
   padding: 18px 16px calc(env(safe-area-inset-bottom) + 28px);
+  scrollbar-width: none;
 }
-.m-sheet-body::-webkit-scrollbar { width: 0; }
+@supports not (scrollbar-width: none) {
+  .m-sheet-body::-webkit-scrollbar { width: 0; }
+}
