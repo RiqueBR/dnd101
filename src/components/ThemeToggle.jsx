@@ -21,11 +21,3 @@ export const ThemeToggleButton = styled.button`
     background: var(--accent-subtle);
   }
 `;
-
-export const MobileThemeToggleButton = styled(ThemeToggleButton)`
-  width: 40px;
-  height: 40px;
-  border-radius: 9px;
-
-  svg { width: 18px; height: 18px; }
-`;
