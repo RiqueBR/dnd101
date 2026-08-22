@@ -6,9 +6,9 @@ Both the branch name and the PR title carry the same type prefix.
 
 ## Types
 
-- `feat` — new user-facing functionality
-- `bug` — bug fix
-- `infra-chore` — everything devops/tooling: CI/CD workflow changes, build config, npm dependency upgrades, and other repo maintenance (docs, lint config, etc.) with no user-facing effect
+- `feat`: new user-facing functionality
+- `bug`: bug fix
+- `infra-chore`: devops/tooling work with no user-facing effect. Covers CI/CD workflow changes, build config, npm dependency upgrades, and other repo maintenance like docs and lint config
 
 Anything that doesn't fit one of these three, default to whichever is closest in spirit (e.g. a pure styling tweak or a test-only change is `feat` if it's part of shipping a change, `infra-chore` if it's incidental cleanup).
 
