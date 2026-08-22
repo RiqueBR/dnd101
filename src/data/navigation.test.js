@@ -1,44 +1,40 @@
 import { describe, expect, it } from 'vitest';
-import { MOBILE_TABS, DESKTOP_NAV } from './navigation.js';
+import { NAV_SECTIONS, flattenSections } from './navigation.js';
 
-describe('MOBILE_TABS', () => {
+describe('NAV_SECTIONS', () => {
   it('is a non-empty array', () => {
-    expect(Array.isArray(MOBILE_TABS)).toBe(true);
-    expect(MOBILE_TABS.length).toBeGreaterThan(0);
+    expect(Array.isArray(NAV_SECTIONS)).toBe(true);
+    expect(NAV_SECTIONS.length).toBeGreaterThan(0);
   });
 
-  it('has unique ids', () => {
-    const ids = MOBILE_TABS.map((t) => t.id);
-    expect(new Set(ids).size).toBe(ids.length);
-  });
-
-  it('every tab has an id, label, icon, heading and subheading', () => {
-    for (const tab of MOBILE_TABS) {
-      expect(typeof tab.id).toBe('string');
-      expect(typeof tab.label).toBe('string');
-      expect(typeof tab.icon).toBe('string');
-      expect(typeof tab.heading).toBe('string');
-      expect(typeof tab.subheading).toBe('string');
+  it('every top-level item and nested child has an id, label and icon', () => {
+    for (const item of NAV_SECTIONS) {
+      expect(typeof item.id).toBe('string');
+      expect(typeof item.label).toBe('string');
+      expect(typeof item.icon).toBe('string');
+      for (const child of item.children ?? []) {
+        expect(typeof child.id).toBe('string');
+        expect(typeof child.label).toBe('string');
+        expect(typeof child.icon).toBe('string');
+      }
     }
   });
 });
 
-describe('DESKTOP_NAV', () => {
-  it('is a non-empty array', () => {
-    expect(Array.isArray(DESKTOP_NAV)).toBe(true);
-    expect(DESKTOP_NAV.length).toBeGreaterThan(0);
-  });
-
-  it('has unique ids', () => {
-    const ids = DESKTOP_NAV.map((item) => item.id);
+describe('flattenSections', () => {
+  it('has unique ids across every leaf, including nested children', () => {
+    const ids = flattenSections().map((leaf) => leaf.id);
     expect(new Set(ids).size).toBe(ids.length);
   });
 
-  it('every item has an id, label and icon', () => {
-    for (const item of DESKTOP_NAV) {
-      expect(typeof item.id).toBe('string');
-      expect(typeof item.label).toBe('string');
-      expect(typeof item.icon).toBe('string');
-    }
+  it('replaces a grouped item with its children rather than including the group itself', () => {
+    const ids = flattenSections().map((leaf) => leaf.id);
+    expect(ids).not.toContain('rules');
+    expect(ids).toEqual(expect.arrayContaining(['abilities', 'actions', 'rounds']));
+  });
+
+  it('yields all 7 leaf sections in nav order', () => {
+    const ids = flattenSections().map((leaf) => leaf.id);
+    expect(ids).toEqual(['races', 'classes', 'pairings', 'abilities', 'actions', 'rounds', 'spells']);
   });
 });
