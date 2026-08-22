@@ -5,18 +5,14 @@ import { fadeIn } from '../../styles/keyframes.js';
 import { NAV_SECTIONS } from '../../data/navigation.js';
 import { Nav, RulesTabBar } from './Nav.jsx';
 import { Header } from './Header.jsx';
-import { RacesSection } from '../sections/RacesSection.jsx';
-import { ClassesSection } from '../sections/ClassesSection.jsx';
-import { PairingSection } from '../sections/PairingSection.jsx';
+import { CharacterWizardSection } from '../sections/CharacterWizardSection.jsx';
 import { AbilityScoresSection } from '../sections/AbilityScoresSection.jsx';
 import { ActionsSection } from '../sections/ActionsSection.jsx';
 import { RoundsSection } from '../sections/RoundsSection.jsx';
 import { SpellsSection } from '../sections/SpellsSection.jsx';
 
 const SECTION_COMPONENTS = {
-  races: RacesSection,
-  classes: ClassesSection,
-  pairings: PairingSection,
+  builder: CharacterWizardSection,
   abilities: AbilityScoresSection,
   actions: ActionsSection,
   rounds: RoundsSection,
@@ -80,7 +76,7 @@ const Main = styled.div`
 
 export function AppShell({ theme, toggleTheme }) {
   const isNarrow = useMediaQuery('(max-width: 768px)');
-  const [activeSection, setActiveSection] = useState(() => localStorage.getItem('dnd101-section') || 'races');
+  const [activeSection, setActiveSection] = useState(() => localStorage.getItem('dnd101-section') || 'builder');
   const [activeRulesTab, setActiveRulesTab] = useState('abilities');
 
   useEffect(() => {
@@ -98,7 +94,7 @@ export function AppShell({ theme, toggleTheme }) {
     if (RULES_CHILD_IDS.includes(id)) setActiveRulesTab(id);
   };
 
-  const Section = SECTION_COMPONENTS[activeSection] || RacesSection;
+  const Section = SECTION_COMPONENTS[activeSection] || CharacterWizardSection;
   const activeNavId = isNarrow && isRulesChild ? 'rules' : activeSection;
 
   return (
