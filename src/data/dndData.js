@@ -416,6 +416,27 @@ export const DND_DATA = {
       ],
       difficulty: "Intermediate", role: "Blaster / Utility / Control",
       color: "#4a2a6b"
+    },
+    {
+      id: "artificer",
+      name: "Artificer",
+      icon: "⚙",
+      tagline: "Inventive engineer of magical devices",
+      description: "Artificers treat magic as a science, something to invent, craft, and infuse into objects rather than channel through raw talent. They use tools as a focus to turn mundane items into extraordinary ones.",
+      hitDie: "d8",
+      primaryAbility: ["INT"],
+      savingThrows: ["CON", "INT"],
+      armorProf: "Light and medium armor, shields",
+      weaponProf: "Simple weapons",
+      keyFeatures: [
+        { level: 1, name: "Magical Tinkering", desc: "Imbue a tiny object with a minor magical effect: a light, a recorded message, a sensory illusion, or a faint sound or smell." },
+        { level: 1, name: "Spellcasting (INT)", desc: "Prepare spells from the artificer list and cast them using tools as your focus. Intelligence is your spellcasting ability." },
+        { level: 2, name: "Infuse Item", desc: "After a long rest, imbue mundane items with the magical infusions you know. Infused items gain extraordinary properties." },
+        { level: 3, name: "Artificer Specialist", desc: "Choose a specialty: Alchemist, Artillerist, Battle Smith, or Armorer." },
+        { level: 3, name: "The Right Tool for the Job", desc: "Use tinker's tools to magically create a set of artisan's tools in your hand." }
+      ],
+      difficulty: "Advanced", role: "Support / Utility / Inventor",
+      color: "#6b7a8b"
     }
   ],
 
