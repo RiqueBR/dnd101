@@ -2,22 +2,7 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { MobileThemeToggleButton } from '../ThemeToggle.jsx';
 import { MRaces, MClasses, MPair, MRules, MSpells } from './MobileScreens.jsx';
-
-const TABS = [
-  { id: 'races', label: 'Races', icon: '◈' },
-  { id: 'classes', label: 'Classes', icon: '⚔' },
-  { id: 'pair', label: 'Pair', icon: '◎' },
-  { id: 'rules', label: 'Rules', icon: '⦿' },
-  { id: 'spells', label: 'Spells', icon: '✦' },
-];
-
-const HEADS = {
-  races: ['Races', 'Ancestry, traits and bonuses'],
-  classes: ['Classes', 'Your adventuring profession'],
-  pair: ['Race + Class', 'Find a combo that works'],
-  rules: ['Rules', 'Stats, actions and turn order'],
-  spells: ['Spells', 'What to cast and what to roll'],
-};
+import { MOBILE_TABS } from '../../data/navigation.js';
 
 const SCREENS = {
   races: MRaces,
@@ -121,7 +106,7 @@ export function MobileApp({ theme, toggleTheme }) {
   const [tab, setTab] = useState(() => localStorage.getItem('dnd101m-tab') || 'races');
   useEffect(() => { localStorage.setItem('dnd101m-tab', tab); }, [tab]);
 
-  const [head, sub] = HEADS[tab];
+  const { heading: head, subheading: sub } = MOBILE_TABS.find(t => t.id === tab);
   const Screen = SCREENS[tab];
 
   return (
@@ -143,7 +128,7 @@ export function MobileApp({ theme, toggleTheme }) {
       </ScrollArea>
 
       <TabBar>
-        {TABS.map((t) => (
+        {MOBILE_TABS.map((t) => (
           <TabButton key={t.id} $active={tab === t.id} onClick={() => setTab(t.id)}>
             <TabIcon>{t.icon}</TabIcon>{t.label}
           </TabButton>
