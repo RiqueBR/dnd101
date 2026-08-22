@@ -7,7 +7,7 @@ A single React app that renders a sidebar desktop layout above 768px and a botto
 ## Stack
 
 - [Vite](https://vite.dev) + React 19, plain JS (no TypeScript)
-- No CSS framework. Hand-written CSS custom properties for theming, flexbox/grid for layout
+- [styled-components](https://styled-components.com) for CSS-in-JS. Theming is CSS custom properties generated from a token file and flipped via a `data-theme` attribute; flexbox/grid for layout
 - No routing library or state management library. This app doesn't need one
 
 ## Project structure
@@ -15,12 +15,15 @@ A single React app that renders a sidebar desktop layout above 768px and a botto
 ```
 src/
   data/dndData.js              All game content (races, classes, spells, rules) as one exported object
+  styles/tokens.js             Design tokens: both themes' CSS custom properties + shared content-derived color maps
+  styles/GlobalStyle.js        createGlobalStyle: reset, theme CSS custom properties, #root layout
+  styles/keyframes.js          Shared styled-components keyframe animations (fadeIn, slideIn)
   hooks/useTheme.js            Theme state + localStorage persistence
   hooks/useMediaQuery.js       matchMedia-backed responsive hook (useSyncExternalStore)
+  components/ThemeToggle.jsx   Shared styled theme-toggle button (desktop + mobile variants)
   components/desktop/          Sidebar layout: DesktopApp, Sections, Cards
   components/mobile/           Bottom-tab layout: MobileApp, MobileScreens
   App.jsx                      Picks Desktop or Mobile based on viewport width
-  index.css                    Theme tokens + layout CSS for both experiences
 ```
 
 ## Development
