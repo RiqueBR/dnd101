@@ -5,6 +5,9 @@ import { fadeIn } from '../../styles/keyframes.js';
 import { schoolColors, rollTypeMeta, actionTypeColors, synergyLabels, synergyColors, dieShapes } from '../../styles/tokens.js';
 import { Label, StatBadge, RaceCard, ClassCard, DetailPanel } from './Cards.jsx';
 
+const LEVEL_LABELS = ['Cantrip', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th'];
+const SCHOOLS = ['All', 'Evocation', 'Abjuration', 'Conjuration', 'Illusion', 'Enchantment', 'Necromancy', 'Divination', 'Transmutation'];
+
 const HeaderWrap = styled.div`
   margin-bottom: 24px;
 `;
@@ -32,53 +35,12 @@ const HeaderRule = styled.div`
   margin-top: 12px;
 `;
 
-export const SectionHeader = ({ title, subtitle }) => (
-  <HeaderWrap>
-    <HeaderTitle>{title}</HeaderTitle>
-    <HeaderSubtitle>{subtitle}</HeaderSubtitle>
-    <HeaderRule />
-  </HeaderWrap>
-);
-
 const CardGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
   gap: 12px;
 `;
 
-// ── Races ─────────────────────────────────────────────
-export const RacesSection = () => {
-  const { races } = DND_DATA;
-  const [selected, setSelected] = useState(null);
-  const toggle = (r) => setSelected((prev) => (prev?.id === r.id ? null : r));
-  return (
-    <div>
-      <SectionHeader title="Races" subtitle="Your race defines your ancestry, giving you stat bonuses, innate traits, and a physical and cultural identity. Choose one that fits your character concept." />
-      {selected && <DetailPanel item={selected} type="race" onClose={() => setSelected(null)} />}
-      <CardGrid>
-        {races.map((r) => <RaceCard key={r.id} race={r} onClick={toggle} isSelected={selected?.id === r.id} />)}
-      </CardGrid>
-    </div>
-  );
-};
-
-// ── Classes ────────────────────────────────────────────
-export const ClassesSection = () => {
-  const { classes } = DND_DATA;
-  const [selected, setSelected] = useState(null);
-  const toggle = (c) => setSelected((prev) => (prev?.id === c.id ? null : c));
-  return (
-    <div>
-      <SectionHeader title="Classes" subtitle="Your class is your adventuring profession. It shapes your abilities, combat style, and role in the party. Each class rewards a different style of play." />
-      {selected && <DetailPanel item={selected} type="class" onClose={() => setSelected(null)} />}
-      <CardGrid>
-        {classes.map((c) => <ClassCard key={c.id} cls={c} onClick={toggle} isSelected={selected?.id === c.id} />)}
-      </CardGrid>
-    </div>
-  );
-};
-
-// ── Ability Scores ────────────────────────────────────
 const ModifierBox = styled.div`
   margin-bottom: 18px;
   background: var(--surface);
@@ -203,56 +165,6 @@ const SavingThrowText = styled.div`
   line-height: 1.5;
   font-style: italic;
 `;
-
-export const AbilityScoresSection = () => {
-  const { abilityScores } = DND_DATA;
-  return (
-    <div>
-      <SectionHeader title="Ability Scores" subtitle="Six core numbers define every creature in D&D. They determine your strengths, weaknesses, and which skills and spells you excel at." />
-      <ModifierBox>
-        <ModifierStrong>How Modifiers Work: </ModifierStrong>
-        Your score isn't used directly. You calculate a modifier: <ModifierFormula>(score − 10) ÷ 2, rounded down</ModifierFormula>. A score of 10 = +0. A score of 16 = +3. This modifier is what gets added to dice rolls.
-      </ModifierBox>
-      <AbilityGrid>
-        {abilityScores.map((score) => (
-          <AbilityCard key={score.id} $color={score.color}>
-            <AbilityCardHead>
-              <AbilityIcon $color={score.color}>{score.abbr}</AbilityIcon>
-              <div>
-                <AbilityName>{score.name}</AbilityName>
-                <AbilityKind>Ability Score</AbilityKind>
-              </div>
-            </AbilityCardHead>
-            <AbilityDescription>{score.description}</AbilityDescription>
-            <Label>What It Affects</Label>
-            <UsesBlock>
-              {score.uses.map((u, i) => (
-                <UseRow key={i}>
-                  <UseBullet $color={score.color}>▸</UseBullet>
-                  <UseText>{u}</UseText>
-                </UseRow>
-              ))}
-            </UsesBlock>
-            {score.skills.length > 0 && <>
-              <Label>Associated Skills</Label>
-              <SkillsRow>
-                {score.skills.map((s) => <SkillChip key={s} $color={score.color}>{s}</SkillChip>)}
-              </SkillsRow>
-            </>}
-            <SavingThrowBlock>
-              <Label>Saving Throw</Label>
-              <SavingThrowText>{score.savingThrow}</SavingThrowText>
-            </SavingThrowBlock>
-          </AbilityCard>
-        ))}
-      </AbilityGrid>
-    </div>
-  );
-};
-
-// ── Spells ─────────────────────────────────────────────
-const LEVEL_LABELS = ['Cantrip', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th'];
-const SCHOOLS = ['All', 'Evocation', 'Abjuration', 'Conjuration', 'Illusion', 'Enchantment', 'Necromancy', 'Divination', 'Transmutation'];
 
 const DicePrimer = styled.div`
   background: var(--surface);
@@ -461,84 +373,6 @@ const SpellHint = styled.div`
   opacity: 0.8;
 `;
 
-export const SpellsSection = () => {
-  const { spells } = DND_DATA;
-  const [filter, setFilter] = useState('All');
-  const [expanded, setExpanded] = useState(null);
-  const filtered = useMemo(() => (filter === 'All' ? spells : spells.filter((s) => s.school === filter)), [filter, spells]);
-
-  return (
-    <div>
-      <SectionHeader title="Spells" subtitle="Spells range from free, infinite-use cantrips to world-shaking 9th-level magic. Each one here shows you exactly what to roll." />
-
-      <DicePrimer>
-        <ModifierStrong>Spell Save DC:</ModifierStrong> 8 + your proficiency bonus + spellcasting modifier.
-        <InlineStrong>Attack Roll:</InlineStrong> 1d20 + proficiency + spellcasting modifier.
-        <ItalicNote>Spellcasting modifier = WIS for Cleric/Druid/Ranger, INT for Wizard/Artificer, CHA for Bard/Paladin/Sorcerer/Warlock.</ItalicNote>
-      </DicePrimer>
-
-      <FilterRow>
-        {SCHOOLS.map((s) => {
-          const active = filter === s;
-          const c = schoolColors[s];
-          return <FilterButton key={s} onClick={() => setFilter(s)} $active={active} $color={c}>{s}</FilterButton>;
-        })}
-      </FilterRow>
-      <SpellGrid>
-        {filtered.map((spell) => {
-          const c = schoolColors[spell.school] || '#888';
-          const open = expanded === spell.name;
-          const rollMeta = spell.roll ? rollTypeMeta[spell.roll.type] : null;
-          return (
-            <SpellCard key={spell.name} onClick={() => setExpanded(open ? null : spell.name)} $open={open} $color={c}>
-              <SpellHeadRow>
-                <SpellName>{spell.name}</SpellName>
-                <SpellBadgeRow>
-                  <LevelChip $color={c}>{LEVEL_LABELS[spell.level]}</LevelChip>
-                  <SchoolChip>{spell.school}</SchoolChip>
-                </SpellBadgeRow>
-              </SpellHeadRow>
-              <SpellMetaRow>
-                <span>{spell.castingTime}</span><MetaDot>·</MetaDot>
-                <span>{spell.range}</span><MetaDot>·</MetaDot>
-                <span>{spell.duration}</span>
-              </SpellMetaRow>
-              {spell.roll && (
-                <RollChipsRow>
-                  {rollMeta && <RollTypeChip $color={rollMeta.color}>{rollMeta.label}</RollTypeChip>}
-                  {spell.roll.save && <RollValueChip>{spell.roll.save} save</RollValueChip>}
-                  {spell.roll.attack && <RollValueChip>{spell.roll.attack}</RollValueChip>}
-                  {spell.roll.damage && <RollValueChip>{spell.roll.damage}</RollValueChip>}
-                  {spell.roll.healing && <RollValueChip>{spell.roll.healing}</RollValueChip>}
-                </RollChipsRow>
-              )}
-              <SpellClasses $open={open}>{spell.classes.join(', ')}</SpellClasses>
-              {open && (
-                <SpellExpanded>
-                  <SpellDesc>{spell.desc}</SpellDesc>
-                  {spell.diceNote && (
-                    <DiceNoteBox $color={c} $hasUpcast={!!spell.roll?.upcast}>
-                      <DiceNoteTitle $color={c}>How to Roll</DiceNoteTitle>
-                      <DiceNoteText>{spell.diceNote}</DiceNoteText>
-                    </DiceNoteBox>
-                  )}
-                  {spell.roll?.upcast && (
-                    <UpcastLine>
-                      <UpcastLabel>Upcast: </UpcastLabel>{spell.roll.upcast}
-                    </UpcastLine>
-                  )}
-                </SpellExpanded>
-              )}
-              {!open && <SpellHint $color={c}>Click for description ▾</SpellHint>}
-            </SpellCard>
-          );
-        })}
-      </SpellGrid>
-    </div>
-  );
-};
-
-// ── Actions ────────────────────────────────────────────
 const OverviewGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -676,55 +510,6 @@ const ActionExample = styled.div`
   font-style: italic;
 `;
 
-export const ActionsSection = () => {
-  const { actions } = DND_DATA;
-  return (
-    <div>
-      <SectionHeader title="Actions" subtitle="Every turn in combat, you get one Action, one Bonus Action, and one Reaction. Here's the full menu of what you can do, and when." />
-      <OverviewGrid>
-        {[['Action', 'Your main turn activity. Attack, cast a spell, dash, or more.', '#c8743a'],
-          ['Bonus Action', 'Some abilities, spells, or class features let you act again.', '#4a6fa5'],
-          ['Reaction', 'Triggered by specific events, even on other people\'s turns.', '#8b3a3a'],
-        ].map(([name, desc, color]) => (
-          <OverviewCard key={name} $color={color}>
-            <OverviewName $color={color}>{name}</OverviewName>
-            <OverviewDesc>{desc}</OverviewDesc>
-          </OverviewCard>
-        ))}
-      </OverviewGrid>
-      {actions.map((cat) => (
-        <CategoryBlock key={cat.category}>
-          <CategoryTitle>{cat.category}</CategoryTitle>
-          <ActionGrid>
-            {cat.items.map((a) => {
-              const typeKey = Object.keys(actionTypeColors).find((k) => a.type.includes(k.split(' ')[0])) || 'Action';
-              const color = actionTypeColors[a.type] || actionTypeColors[typeKey] || '#888';
-              return (
-                <ActionCard key={a.name} $color={color}>
-                  <ActionHeadRow>
-                    <ActionName>{a.name}</ActionName>
-                    <ActionTypeChip $color={color}>{a.type}</ActionTypeChip>
-                  </ActionHeadRow>
-                  <ActionDesc>{a.desc}</ActionDesc>
-                  {a.dice && (
-                    <DiceBox>
-                      <DiceLabel>Rolls:</DiceLabel>
-                      {a.dice.map((d, i) => <DiceChip key={i} $color={color}>{d}</DiceChip>)}
-                      {a.diceNote && <DiceNoteInline>{a.diceNote}</DiceNoteInline>}
-                    </DiceBox>
-                  )}
-                  <ActionExample>e.g. {a.example}</ActionExample>
-                </ActionCard>
-              );
-            })}
-          </ActionGrid>
-        </CategoryBlock>
-      ))}
-    </div>
-  );
-};
-
-// ── Rounds / Turn Structure ─────────────────────────
 const DieWrap = styled.div`
   display: inline-flex;
   flex-direction: column;
@@ -755,13 +540,6 @@ const DieLabel = styled.div`
   max-width: 90px;
   line-height: 1.3;
 `;
-
-const Die = ({ sides, label, color }) => (
-  <DieWrap>
-    <DieShape $color={color} $shape={dieShapes[sides] || dieShapes[20]}>d{sides}</DieShape>
-    {label && <DieLabel>{label}</DieLabel>}
-  </DieWrap>
-);
 
 const OverviewBox = styled.div`
   background: var(--surface);
@@ -986,88 +764,6 @@ const DicePrimerBox = styled.div`
   justify-content: space-around;
 `;
 
-export const RoundsSection = () => {
-  const { rounds } = DND_DATA;
-  return (
-    <div>
-      <SectionHeader title="Anatomy of a Round" subtitle="Combat in D&D is structured: everyone takes a turn in order, then the round repeats. Here's exactly what happens, and what you can do on your turn." />
-
-      <OverviewBox>
-        <OverviewText>{rounds.overview}</OverviewText>
-      </OverviewBox>
-
-      <Label>Step 0: Rolling Initiative</Label>
-      <InitiativeBox>
-        <Die sides={20} label="Initiative" />
-        <InitiativeBody>
-          <InitiativeTitle>{rounds.initiative.title}</InitiativeTitle>
-          <InitiativeDesc>{rounds.initiative.desc}</InitiativeDesc>
-          <InitiativeDiceChip>{rounds.initiative.dice}</InitiativeDiceChip>
-          <InitiativeTip>{rounds.initiative.tip}</InitiativeTip>
-        </InitiativeBody>
-      </InitiativeBox>
-
-      <Label>On Your Turn: the 6 Steps</Label>
-      <TurnFlowWrap>
-        {rounds.turnFlow.map((step, i) => (
-          <TurnStepRow key={step.step}>
-            <TurnStepColumn>
-              <TurnStepNum>{step.step}</TurnStepNum>
-              {i < rounds.turnFlow.length - 1 && <TurnStepConnector />}
-            </TurnStepColumn>
-            <TurnStepBody>
-              <TurnStepName>{step.name}</TurnStepName>
-              <TurnStepDesc>{step.desc}</TurnStepDesc>
-            </TurnStepBody>
-          </TurnStepRow>
-        ))}
-      </TurnFlowWrap>
-
-      <Label>Reactions: the Off-Turn Exception</Label>
-      <ReactionsBox>
-        <OverviewText>{rounds.reactionsNote}</OverviewText>
-      </ReactionsBox>
-
-      <Label>Movement Rules</Label>
-      <MovementGrid>
-        {rounds.movementRules.map((rule) => (
-          <MovementCard key={rule.name}>
-            <MovementName>{rule.name}</MovementName>
-            <MovementDesc>{rule.desc}</MovementDesc>
-          </MovementCard>
-        ))}
-      </MovementGrid>
-
-      <Label>Common Questions</Label>
-      <QAGrid>
-        {rounds.commonQuestions.map((qa, i) => (
-          <QACard key={i}>
-            <QARow>
-              <QMarker>Q.</QMarker>
-              <QAQuestion>{qa.q}</QAQuestion>
-            </QARow>
-            <QARow $last>
-              <AMarker>A.</AMarker>
-              <QAAnswer>{qa.a}</QAAnswer>
-            </QARow>
-          </QACard>
-        ))}
-      </QAGrid>
-
-      <Label>The Dice You'll Roll</Label>
-      <DicePrimerBox>
-        <Die sides={4} label="Daggers, healing" color="#4a7a2a" />
-        <Die sides={6} label="Sneak Attack, Fireball" color="#c8743a" />
-        <Die sides={8} label="Longsword, Cure Wounds" color="#4a6fa5" />
-        <Die sides={10} label="Halberds, big spells" color="#8b3a6b" />
-        <Die sides={12} label="Greataxe damage" color="#8b3a3a" />
-        <Die sides={20} label="ATTACKS & CHECKS" color="var(--accent)" />
-      </DicePrimerBox>
-    </div>
-  );
-};
-
-// ── Pairings ───────────────────────────────────────────
 const SynergyBarWrap = styled.div`
   display: flex;
   gap: 4px;
@@ -1082,12 +778,6 @@ const SynergySegment = styled.div`
   border: 1px solid ${(p) => (p.$filled ? p.$color : 'var(--border)')};
   transition: all 0.3s;
 `;
-
-const SynergyBar = ({ score, color }) => (
-  <SynergyBarWrap>
-    {[1, 2, 3, 4, 5].map((i) => <SynergySegment key={i} $filled={i <= score} $color={color} />)}
-  </SynergyBarWrap>
-);
 
 const PickerGrid = styled.div`
   display: grid;
@@ -1231,6 +921,316 @@ const Placeholder = styled.div`
   font-style: italic;
   font-size: 14px;
 `;
+
+export const SectionHeader = ({ title, subtitle }) => (
+  <HeaderWrap>
+    <HeaderTitle>{title}</HeaderTitle>
+    <HeaderSubtitle>{subtitle}</HeaderSubtitle>
+    <HeaderRule />
+  </HeaderWrap>
+);
+
+// ── Races ─────────────────────────────────────────────
+export const RacesSection = () => {
+  const { races } = DND_DATA;
+  const [selected, setSelected] = useState(null);
+  const toggle = (r) => setSelected((prev) => (prev?.id === r.id ? null : r));
+  return (
+    <div>
+      <SectionHeader title="Races" subtitle="Your race defines your ancestry, giving you stat bonuses, innate traits, and a physical and cultural identity. Choose one that fits your character concept." />
+      {selected && <DetailPanel item={selected} type="race" onClose={() => setSelected(null)} />}
+      <CardGrid>
+        {races.map((r) => <RaceCard key={r.id} race={r} onClick={toggle} isSelected={selected?.id === r.id} />)}
+      </CardGrid>
+    </div>
+  );
+};
+
+// ── Classes ────────────────────────────────────────────
+export const ClassesSection = () => {
+  const { classes } = DND_DATA;
+  const [selected, setSelected] = useState(null);
+  const toggle = (c) => setSelected((prev) => (prev?.id === c.id ? null : c));
+  return (
+    <div>
+      <SectionHeader title="Classes" subtitle="Your class is your adventuring profession. It shapes your abilities, combat style, and role in the party. Each class rewards a different style of play." />
+      {selected && <DetailPanel item={selected} type="class" onClose={() => setSelected(null)} />}
+      <CardGrid>
+        {classes.map((c) => <ClassCard key={c.id} cls={c} onClick={toggle} isSelected={selected?.id === c.id} />)}
+      </CardGrid>
+    </div>
+  );
+};
+
+// ── Ability Scores ────────────────────────────────────
+export const AbilityScoresSection = () => {
+  const { abilityScores } = DND_DATA;
+  return (
+    <div>
+      <SectionHeader title="Ability Scores" subtitle="Six core numbers define every creature in D&D. They determine your strengths, weaknesses, and which skills and spells you excel at." />
+      <ModifierBox>
+        <ModifierStrong>How Modifiers Work: </ModifierStrong>
+        Your score isn't used directly. You calculate a modifier: <ModifierFormula>(score − 10) ÷ 2, rounded down</ModifierFormula>. A score of 10 = +0. A score of 16 = +3. This modifier is what gets added to dice rolls.
+      </ModifierBox>
+      <AbilityGrid>
+        {abilityScores.map((score) => (
+          <AbilityCard key={score.id} $color={score.color}>
+            <AbilityCardHead>
+              <AbilityIcon $color={score.color}>{score.abbr}</AbilityIcon>
+              <div>
+                <AbilityName>{score.name}</AbilityName>
+                <AbilityKind>Ability Score</AbilityKind>
+              </div>
+            </AbilityCardHead>
+            <AbilityDescription>{score.description}</AbilityDescription>
+            <Label>What It Affects</Label>
+            <UsesBlock>
+              {score.uses.map((u, i) => (
+                <UseRow key={i}>
+                  <UseBullet $color={score.color}>▸</UseBullet>
+                  <UseText>{u}</UseText>
+                </UseRow>
+              ))}
+            </UsesBlock>
+            {score.skills.length > 0 && <>
+              <Label>Associated Skills</Label>
+              <SkillsRow>
+                {score.skills.map((s) => <SkillChip key={s} $color={score.color}>{s}</SkillChip>)}
+              </SkillsRow>
+            </>}
+            <SavingThrowBlock>
+              <Label>Saving Throw</Label>
+              <SavingThrowText>{score.savingThrow}</SavingThrowText>
+            </SavingThrowBlock>
+          </AbilityCard>
+        ))}
+      </AbilityGrid>
+    </div>
+  );
+};
+
+// ── Spells ─────────────────────────────────────────────
+export const SpellsSection = () => {
+  const { spells } = DND_DATA;
+  const [filter, setFilter] = useState('All');
+  const [expanded, setExpanded] = useState(null);
+  const filtered = useMemo(() => (filter === 'All' ? spells : spells.filter((s) => s.school === filter)), [filter, spells]);
+
+  return (
+    <div>
+      <SectionHeader title="Spells" subtitle="Spells range from free, infinite-use cantrips to world-shaking 9th-level magic. Each one here shows you exactly what to roll." />
+
+      <DicePrimer>
+        <ModifierStrong>Spell Save DC:</ModifierStrong> 8 + your proficiency bonus + spellcasting modifier.
+        <InlineStrong>Attack Roll:</InlineStrong> 1d20 + proficiency + spellcasting modifier.
+        <ItalicNote>Spellcasting modifier = WIS for Cleric/Druid/Ranger, INT for Wizard/Artificer, CHA for Bard/Paladin/Sorcerer/Warlock.</ItalicNote>
+      </DicePrimer>
+
+      <FilterRow>
+        {SCHOOLS.map((s) => {
+          const active = filter === s;
+          const c = schoolColors[s];
+          return <FilterButton key={s} onClick={() => setFilter(s)} $active={active} $color={c}>{s}</FilterButton>;
+        })}
+      </FilterRow>
+      <SpellGrid>
+        {filtered.map((spell) => {
+          const c = schoolColors[spell.school] || '#888';
+          const open = expanded === spell.name;
+          const rollMeta = spell.roll ? rollTypeMeta[spell.roll.type] : null;
+          return (
+            <SpellCard key={spell.name} onClick={() => setExpanded(open ? null : spell.name)} $open={open} $color={c}>
+              <SpellHeadRow>
+                <SpellName>{spell.name}</SpellName>
+                <SpellBadgeRow>
+                  <LevelChip $color={c}>{LEVEL_LABELS[spell.level]}</LevelChip>
+                  <SchoolChip>{spell.school}</SchoolChip>
+                </SpellBadgeRow>
+              </SpellHeadRow>
+              <SpellMetaRow>
+                <span>{spell.castingTime}</span><MetaDot>·</MetaDot>
+                <span>{spell.range}</span><MetaDot>·</MetaDot>
+                <span>{spell.duration}</span>
+              </SpellMetaRow>
+              {spell.roll && (
+                <RollChipsRow>
+                  {rollMeta && <RollTypeChip $color={rollMeta.color}>{rollMeta.label}</RollTypeChip>}
+                  {spell.roll.save && <RollValueChip>{spell.roll.save} save</RollValueChip>}
+                  {spell.roll.attack && <RollValueChip>{spell.roll.attack}</RollValueChip>}
+                  {spell.roll.damage && <RollValueChip>{spell.roll.damage}</RollValueChip>}
+                  {spell.roll.healing && <RollValueChip>{spell.roll.healing}</RollValueChip>}
+                </RollChipsRow>
+              )}
+              <SpellClasses $open={open}>{spell.classes.join(', ')}</SpellClasses>
+              {open && (
+                <SpellExpanded>
+                  <SpellDesc>{spell.desc}</SpellDesc>
+                  {spell.diceNote && (
+                    <DiceNoteBox $color={c} $hasUpcast={!!spell.roll?.upcast}>
+                      <DiceNoteTitle $color={c}>How to Roll</DiceNoteTitle>
+                      <DiceNoteText>{spell.diceNote}</DiceNoteText>
+                    </DiceNoteBox>
+                  )}
+                  {spell.roll?.upcast && (
+                    <UpcastLine>
+                      <UpcastLabel>Upcast: </UpcastLabel>{spell.roll.upcast}
+                    </UpcastLine>
+                  )}
+                </SpellExpanded>
+              )}
+              {!open && <SpellHint $color={c}>Click for description ▾</SpellHint>}
+            </SpellCard>
+          );
+        })}
+      </SpellGrid>
+    </div>
+  );
+};
+
+// ── Actions ────────────────────────────────────────────
+export const ActionsSection = () => {
+  const { actions } = DND_DATA;
+  return (
+    <div>
+      <SectionHeader title="Actions" subtitle="Every turn in combat, you get one Action, one Bonus Action, and one Reaction. Here's the full menu of what you can do, and when." />
+      <OverviewGrid>
+        {[['Action', 'Your main turn activity. Attack, cast a spell, dash, or more.', '#c8743a'],
+          ['Bonus Action', 'Some abilities, spells, or class features let you act again.', '#4a6fa5'],
+          ['Reaction', 'Triggered by specific events, even on other people\'s turns.', '#8b3a3a'],
+        ].map(([name, desc, color]) => (
+          <OverviewCard key={name} $color={color}>
+            <OverviewName $color={color}>{name}</OverviewName>
+            <OverviewDesc>{desc}</OverviewDesc>
+          </OverviewCard>
+        ))}
+      </OverviewGrid>
+      {actions.map((cat) => (
+        <CategoryBlock key={cat.category}>
+          <CategoryTitle>{cat.category}</CategoryTitle>
+          <ActionGrid>
+            {cat.items.map((a) => {
+              const typeKey = Object.keys(actionTypeColors).find((k) => a.type.includes(k.split(' ')[0])) || 'Action';
+              const color = actionTypeColors[a.type] || actionTypeColors[typeKey] || '#888';
+              return (
+                <ActionCard key={a.name} $color={color}>
+                  <ActionHeadRow>
+                    <ActionName>{a.name}</ActionName>
+                    <ActionTypeChip $color={color}>{a.type}</ActionTypeChip>
+                  </ActionHeadRow>
+                  <ActionDesc>{a.desc}</ActionDesc>
+                  {a.dice && (
+                    <DiceBox>
+                      <DiceLabel>Rolls:</DiceLabel>
+                      {a.dice.map((d, i) => <DiceChip key={i} $color={color}>{d}</DiceChip>)}
+                      {a.diceNote && <DiceNoteInline>{a.diceNote}</DiceNoteInline>}
+                    </DiceBox>
+                  )}
+                  <ActionExample>e.g. {a.example}</ActionExample>
+                </ActionCard>
+              );
+            })}
+          </ActionGrid>
+        </CategoryBlock>
+      ))}
+    </div>
+  );
+};
+
+// ── Rounds / Turn Structure ─────────────────────────
+const Die = ({ sides, label, color }) => (
+  <DieWrap>
+    <DieShape $color={color} $shape={dieShapes[sides] || dieShapes[20]}>d{sides}</DieShape>
+    {label && <DieLabel>{label}</DieLabel>}
+  </DieWrap>
+);
+
+export const RoundsSection = () => {
+  const { rounds } = DND_DATA;
+  return (
+    <div>
+      <SectionHeader title="Anatomy of a Round" subtitle="Combat in D&D is structured: everyone takes a turn in order, then the round repeats. Here's exactly what happens, and what you can do on your turn." />
+
+      <OverviewBox>
+        <OverviewText>{rounds.overview}</OverviewText>
+      </OverviewBox>
+
+      <Label>Step 0: Rolling Initiative</Label>
+      <InitiativeBox>
+        <Die sides={20} label="Initiative" />
+        <InitiativeBody>
+          <InitiativeTitle>{rounds.initiative.title}</InitiativeTitle>
+          <InitiativeDesc>{rounds.initiative.desc}</InitiativeDesc>
+          <InitiativeDiceChip>{rounds.initiative.dice}</InitiativeDiceChip>
+          <InitiativeTip>{rounds.initiative.tip}</InitiativeTip>
+        </InitiativeBody>
+      </InitiativeBox>
+
+      <Label>On Your Turn: the 6 Steps</Label>
+      <TurnFlowWrap>
+        {rounds.turnFlow.map((step, i) => (
+          <TurnStepRow key={step.step}>
+            <TurnStepColumn>
+              <TurnStepNum>{step.step}</TurnStepNum>
+              {i < rounds.turnFlow.length - 1 && <TurnStepConnector />}
+            </TurnStepColumn>
+            <TurnStepBody>
+              <TurnStepName>{step.name}</TurnStepName>
+              <TurnStepDesc>{step.desc}</TurnStepDesc>
+            </TurnStepBody>
+          </TurnStepRow>
+        ))}
+      </TurnFlowWrap>
+
+      <Label>Reactions: the Off-Turn Exception</Label>
+      <ReactionsBox>
+        <OverviewText>{rounds.reactionsNote}</OverviewText>
+      </ReactionsBox>
+
+      <Label>Movement Rules</Label>
+      <MovementGrid>
+        {rounds.movementRules.map((rule) => (
+          <MovementCard key={rule.name}>
+            <MovementName>{rule.name}</MovementName>
+            <MovementDesc>{rule.desc}</MovementDesc>
+          </MovementCard>
+        ))}
+      </MovementGrid>
+
+      <Label>Common Questions</Label>
+      <QAGrid>
+        {rounds.commonQuestions.map((qa, i) => (
+          <QACard key={i}>
+            <QARow>
+              <QMarker>Q.</QMarker>
+              <QAQuestion>{qa.q}</QAQuestion>
+            </QARow>
+            <QARow $last>
+              <AMarker>A.</AMarker>
+              <QAAnswer>{qa.a}</QAAnswer>
+            </QARow>
+          </QACard>
+        ))}
+      </QAGrid>
+
+      <Label>The Dice You'll Roll</Label>
+      <DicePrimerBox>
+        <Die sides={4} label="Daggers, healing" color="#4a7a2a" />
+        <Die sides={6} label="Sneak Attack, Fireball" color="#c8743a" />
+        <Die sides={8} label="Longsword, Cure Wounds" color="#4a6fa5" />
+        <Die sides={10} label="Halberds, big spells" color="#8b3a6b" />
+        <Die sides={12} label="Greataxe damage" color="#8b3a3a" />
+        <Die sides={20} label="ATTACKS & CHECKS" color="var(--accent)" />
+      </DicePrimerBox>
+    </div>
+  );
+};
+
+// ── Pairings ───────────────────────────────────────────
+const SynergyBar = ({ score, color }) => (
+  <SynergyBarWrap>
+    {[1, 2, 3, 4, 5].map((i) => <SynergySegment key={i} $filled={i <= score} $color={color} />)}
+  </SynergyBarWrap>
+);
 
 export const PairingSection = () => {
   const { races, classes, pairings } = DND_DATA;
