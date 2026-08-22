@@ -20,7 +20,7 @@ Run `npm test` and `npm run lint` before considering any change done. Don't wait
 
 ## What to test
 
-- Hooks with real logic (`useTheme`, `useMediaQuery`): every branch of their behavior, including defaults, transitions, and persistence.
+- Hooks with real logic (`useTheme`): every branch of their behavior, including defaults, transitions, and persistence.
 - Data modules (`dndData.js`): shape/invariants that the app relies on (e.g., every class has required fields), not the full content.
 - Components with conditional rendering or interaction (selection state, hover-driven UI, empty states).
 

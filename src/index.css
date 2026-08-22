@@ -66,7 +66,7 @@ a:hover { color: var(--text); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-#theme-toggle {
+.theme-toggle {
   border-radius: 6px;
   background: var(--surface2);
   border: 1px solid var(--border);
@@ -78,7 +78,7 @@ a:hover { color: var(--text); }
   flex-shrink: 0;
   transition: all 0.15s;
 }
-#theme-toggle:hover {
+.theme-toggle:hover {
   border-color: var(--accent);
   background: var(--accent-subtle);
 }
@@ -91,8 +91,10 @@ a:hover { color: var(--text); }
 }
 
 /* ══════════════════════════════════════════════════════
-   Desktop layout: rendered at widths above 768px
-   Renders #sidebar + #main directly as row-flex children of #root.
+   Desktop layout: shown at widths above 768px.
+   #sidebar + #main are direct row-flex children of #root.
+   Both DesktopApp and MobileApp are always mounted; only one
+   shell is displayed at a time, picked by these breakpoints.
    ══════════════════════════════════════════════════════ */
 
 #sidebar {
@@ -120,11 +122,15 @@ a:hover { color: var(--text); }
   #main::-webkit-scrollbar-thumb { background: var(--scrollbar); border-radius: 3px; }
 }
 
-#sidebar #theme-toggle { width: 32px; height: 32px; }
-#sidebar #theme-toggle svg { width: 16px; height: 16px; }
+#sidebar .theme-toggle { width: 32px; height: 32px; }
+#sidebar .theme-toggle svg { width: 16px; height: 16px; }
+
+@media (max-width: 768px) {
+  #sidebar, #main { display: none; }
+}
 
 /* ══════════════════════════════════════════════════════
-   Mobile layout: rendered at widths 768px and below
+   Mobile layout: shown at widths 768px and below.
    .mobile-shell is the single column-flex child of #root.
    ══════════════════════════════════════════════════════ */
 
@@ -135,6 +141,10 @@ a:hover { color: var(--text); }
   width: 100%;
   overflow: hidden;
   overscroll-behavior: none;
+}
+
+@media (min-width: 769px) {
+  .mobile-shell { display: none; }
 }
 
 .m-top {
@@ -153,8 +163,8 @@ a:hover { color: var(--text); }
 }
 .m-title { font-family: var(--font-heading); font-size: 1.1875rem; font-weight: 800; letter-spacing: .03em; color: var(--text); line-height: 1.1; }
 .m-sub { font-size: .6875rem; color: var(--text-muted); margin-top: 1px; }
-.m-top #theme-toggle { width: 40px; height: 40px; border-radius: 9px; }
-.m-top #theme-toggle svg { width: 18px; height: 18px; }
+.m-top .theme-toggle { width: 40px; height: 40px; border-radius: 9px; }
+.m-top .theme-toggle svg { width: 18px; height: 18px; }
 
 .m-scroll {
   flex: 1;

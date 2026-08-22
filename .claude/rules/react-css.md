@@ -22,4 +22,4 @@ When a new visual need doesn't fit an existing `--token`, add the token to both 
 ## Layout & responsiveness
 
 - Flexbox/grid only. No layout framework.
-- The desktop/mobile split happens at a single 768px breakpoint via the `useMediaQuery` hook (`src/hooks/useMediaQuery.js`), consumed in `App.jsx` to pick `DesktopApp` vs `MobileApp`. Reuse this hook for any new responsive behavior instead of introducing ad hoc `matchMedia` calls or a second breakpoint.
+- The desktop/mobile split happens at a single 768px breakpoint, done entirely in CSS: `App.jsx` always mounts both `DesktopApp` and `MobileApp`, and `src/index.css` uses `@media (max-width: 768px)` / `@media (min-width: 769px)` to hide whichever shell doesn't apply. Reuse this same breakpoint and pattern (both trees mounted, CSS picks which one shows) for any new responsive behavior instead of introducing JS-based `matchMedia` logic or a second breakpoint.
