@@ -31,13 +31,6 @@ const StatName = styled.span`
   font-size: 10px;
 `;
 
-export const StatBadge = ({ stat, value }) => (
-  <StatBadgeWrap>
-    <StatName>{stat}</StatName>
-    <span>+{value}</span>
-  </StatBadgeWrap>
-);
-
 const DifficultyWrap = styled.span`
   padding: 2px 8px;
   border-radius: 4px;
@@ -49,10 +42,6 @@ const DifficultyWrap = styled.span`
   color: ${(p) => p.$color};
   border: 1px solid ${(p) => p.$color}44;
 `;
-
-export const DifficultyBadge = ({ level }) => (
-  <DifficultyWrap $color={difficultyColors[level] || '#888'}>{level}</DifficultyWrap>
-);
 
 const CardWrap = styled.div`
   background: var(--surface);
@@ -172,34 +161,6 @@ const MoreTraitsNote = styled.div`
   margin-top: 3px;
 `;
 
-export const RaceCard = ({ race, onClick, isSelected }) => (
-  <CardWrap onClick={() => onClick(race)} $selected={isSelected} $color={race.color}>
-    <CardHeaderRow>
-      <div>
-        <CardName>{race.name}</CardName>
-        <CardTagline>{race.tagline}</CardTagline>
-      </div>
-      <RaceIconBadge $color={race.color}>{race.icon}</RaceIconBadge>
-    </CardHeaderRow>
-    <StatRow>
-      {Object.entries(race.statBonuses).map(([s, v]) => <StatBadge key={s} stat={s} value={v} />)}
-      {race.extraBonuses && <ExtraBonusText>{race.extraBonuses}</ExtraBonusText>}
-    </StatRow>
-    <MetaRow>
-      <span>Size: {race.size}</span><span>Speed: {race.speed} ft</span>
-    </MetaRow>
-    <TraitsBlock>
-      {race.traits.slice(0, 2).map((t) => (
-        <TraitRow key={t.name}>
-          <TraitName>{t.name}. </TraitName>
-          <TraitDesc>{t.desc}</TraitDesc>
-        </TraitRow>
-      ))}
-      {race.traits.length > 2 && <MoreTraitsNote>+{race.traits.length - 2} more traits, click to expand</MoreTraitsNote>}
-    </TraitsBlock>
-  </CardWrap>
-);
-
 const ClassBadgeRow = styled.div`
   display: flex;
   gap: 5px;
@@ -256,32 +217,6 @@ const FeatureName = styled.span`
   color: var(--accent);
   font-family: var(--font-heading);
 `;
-
-export const ClassCard = ({ cls, onClick, isSelected }) => (
-  <CardWrap onClick={() => onClick(cls)} $selected={isSelected} $color={cls.color}>
-    <CardHeaderRow>
-      <div>
-        <CardName>{cls.name}</CardName>
-        <CardTagline>{cls.tagline}</CardTagline>
-      </div>
-      <ClassIconBadge $color={cls.color}>{cls.icon}</ClassIconBadge>
-    </CardHeaderRow>
-    <ClassBadgeRow>
-      <HDBadge>HD: {cls.hitDie}</HDBadge>
-      {cls.primaryAbility.map((a) => <AbilityBadge key={a}>{a}</AbilityBadge>)}
-      <DifficultyBadge level={cls.difficulty} />
-    </ClassBadgeRow>
-    <RoleText>{cls.role}</RoleText>
-    <TraitsBlock>
-      {cls.keyFeatures.slice(0, 2).map((f) => (
-        <FeatureRow key={f.name}>
-          <FeatureLevel>Lv.{f.level}</FeatureLevel>
-          <FeatureName>{f.name}</FeatureName>
-        </FeatureRow>
-      ))}
-    </TraitsBlock>
-  </CardWrap>
-);
 
 const DetailWrap = styled.div`
   background: var(--surface);
@@ -481,6 +416,71 @@ const LevelBadge = styled.div`
   font-family: monospace;
   flex-shrink: 0;
 `;
+
+export const StatBadge = ({ stat, value }) => (
+  <StatBadgeWrap>
+    <StatName>{stat}</StatName>
+    <span>+{value}</span>
+  </StatBadgeWrap>
+);
+
+export const DifficultyBadge = ({ level }) => (
+  <DifficultyWrap $color={difficultyColors[level] || '#888'}>{level}</DifficultyWrap>
+);
+
+export const RaceCard = ({ race, onClick, isSelected }) => (
+  <CardWrap onClick={() => onClick(race)} $selected={isSelected} $color={race.color}>
+    <CardHeaderRow>
+      <div>
+        <CardName>{race.name}</CardName>
+        <CardTagline>{race.tagline}</CardTagline>
+      </div>
+      <RaceIconBadge $color={race.color}>{race.icon}</RaceIconBadge>
+    </CardHeaderRow>
+    <StatRow>
+      {Object.entries(race.statBonuses).map(([s, v]) => <StatBadge key={s} stat={s} value={v} />)}
+      {race.extraBonuses && <ExtraBonusText>{race.extraBonuses}</ExtraBonusText>}
+    </StatRow>
+    <MetaRow>
+      <span>Size: {race.size}</span><span>Speed: {race.speed} ft</span>
+    </MetaRow>
+    <TraitsBlock>
+      {race.traits.slice(0, 2).map((t) => (
+        <TraitRow key={t.name}>
+          <TraitName>{t.name}. </TraitName>
+          <TraitDesc>{t.desc}</TraitDesc>
+        </TraitRow>
+      ))}
+      {race.traits.length > 2 && <MoreTraitsNote>+{race.traits.length - 2} more traits, click to expand</MoreTraitsNote>}
+    </TraitsBlock>
+  </CardWrap>
+);
+
+export const ClassCard = ({ cls, onClick, isSelected }) => (
+  <CardWrap onClick={() => onClick(cls)} $selected={isSelected} $color={cls.color}>
+    <CardHeaderRow>
+      <div>
+        <CardName>{cls.name}</CardName>
+        <CardTagline>{cls.tagline}</CardTagline>
+      </div>
+      <ClassIconBadge $color={cls.color}>{cls.icon}</ClassIconBadge>
+    </CardHeaderRow>
+    <ClassBadgeRow>
+      <HDBadge>HD: {cls.hitDie}</HDBadge>
+      {cls.primaryAbility.map((a) => <AbilityBadge key={a}>{a}</AbilityBadge>)}
+      <DifficultyBadge level={cls.difficulty} />
+    </ClassBadgeRow>
+    <RoleText>{cls.role}</RoleText>
+    <TraitsBlock>
+      {cls.keyFeatures.slice(0, 2).map((f) => (
+        <FeatureRow key={f.name}>
+          <FeatureLevel>Lv.{f.level}</FeatureLevel>
+          <FeatureName>{f.name}</FeatureName>
+        </FeatureRow>
+      ))}
+    </TraitsBlock>
+  </CardWrap>
+);
 
 export const DetailPanel = ({ item, type, onClose }) => {
   if (!item) return null;

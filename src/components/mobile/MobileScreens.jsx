@@ -3,9 +3,8 @@ import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import { DND_DATA } from '../../data/dndData.js';
 import { slideIn } from '../../styles/keyframes.js';
-import { schoolColors, rollTypeMeta, actionTypeColors, synergyLabels, synergyColors, dieShapes, difficultyColors } from '../../styles/tokens.js';
+import { schoolColors, rollTypeMeta, actionTypeColors, synergyLabels, synergyColors, dieShapes, difficultyColors, spellSchools, spellLevelLabels } from '../../styles/tokens.js';
 
-/* ── shared bits (M- prefixed to avoid collisions) ── */
 const StatWrap = styled.span`
   display: inline-flex;
   gap: 4px;
@@ -24,10 +23,6 @@ const StatLabel = styled.span`
   color: var(--text-muted);
   font-size: 10px;
 `;
-
-const MStat = ({ stat, value }) => (
-  <StatWrap><StatLabel>{stat}</StatLabel>+{value}</StatWrap>
-);
 
 const MLabel = styled.div`
   font-family: var(--font-heading);
@@ -48,8 +43,6 @@ const ChipWrap = styled.span`
   border: 1px solid ${(p) => (p.$solid ? `${p.$color}44` : 'var(--border)')};
   white-space: nowrap;
 `;
-
-const MChip = ({ children, color, solid }) => <ChipWrap $color={color} $solid={solid}>{children}</ChipWrap>;
 
 const DieWrap = styled.div`
   display: flex;
@@ -81,14 +74,6 @@ const DieLabel = styled.div`
   line-height: 1.3;
 `;
 
-const MDie = ({ sides, label }) => (
-  <DieWrap>
-    <DieShape $shape={dieShapes[sides]}>d{sides}</DieShape>
-    {label && <DieLabel>{label}</DieLabel>}
-  </DieWrap>
-);
-
-/* row used by race + class lists */
 const RowButton = styled.button`
   display: flex;
   align-items: center;
@@ -153,19 +138,6 @@ const RowChevron = styled.span`
   flex-shrink: 0;
 `;
 
-const MRow = ({ color, badge, title, sub, chips, onClick }) => (
-  <RowButton onClick={onClick} $color={color}>
-    <RowBadge $color={color}>{badge}</RowBadge>
-    <RowContent>
-      <RowTitle>{title}</RowTitle>
-      <RowSub>{sub}</RowSub>
-      <RowChips>{chips}</RowChips>
-    </RowContent>
-    <RowChevron>›</RowChevron>
-  </RowButton>
-);
-
-/* full-screen detail sheet */
 const Sheet = styled.div`
   position: fixed;
   inset: 0;
@@ -236,22 +208,6 @@ const SheetSub = styled.div`
   margin-top: 3px;
 `;
 
-const MDetail = ({ title, sub, color, onBack, children }) => createPortal(
-  <Sheet>
-    <SheetHead>
-      <BackButton onClick={onBack}>‹ Back</BackButton>
-    </SheetHead>
-    <SheetBody>
-      <SheetHeader $color={color}>
-        <SheetTitle>{title}</SheetTitle>
-        <SheetSub>{sub}</SheetSub>
-      </SheetHeader>
-      {children}
-    </SheetBody>
-  </Sheet>,
-  document.body,
-);
-
 const CardWrap = styled.div`
   background: var(--surface);
   border: 1px solid var(--border);
@@ -259,8 +215,6 @@ const CardWrap = styled.div`
   border-radius: 9px;
   padding: 12px 14px;
 `;
-
-const MCard = ({ children, color }) => <CardWrap $color={color}>{children}</CardWrap>;
 
 const Paragraph = styled.p`
   font-size: ${(p) => p.$size || '15px'};
@@ -385,50 +339,6 @@ const NamedChip = styled.span`
   font-family: var(--font-heading);
 `;
 
-/* ── Races ── */
-export const MRaces = () => {
-  const { races } = DND_DATA;
-  const [sel, setSel] = useState(null);
-  if (sel) return (
-    <MDetail title={sel.name} sub={sel.tagline} color={sel.color} onBack={() => setSel(null)}>
-      <Paragraph>{sel.description}</Paragraph>
-      <MLabel>Ability Bonuses</MLabel>
-      <StatRow>{Object.entries(sel.statBonuses).map(([s, v]) => <MStat key={s} stat={s} value={v} />)}</StatRow>
-      {sel.extraBonuses && <ExtraNote>{sel.extraBonuses}</ExtraNote>}
-      <SizeSpeedRow>
-        <MCard><MiniLabel>Size</MiniLabel><MiniValue>{sel.size}</MiniValue></MCard>
-        <MCard><MiniLabel>Speed</MiniLabel><MiniValue>{sel.speed} ft</MiniValue></MCard>
-      </SizeSpeedRow>
-      {sel.subRaces && <>
-        <MLabel>Subraces</MLabel>
-        <Grid>{sel.subRaces.map((sr) => (
-          <MCard key={sr.name} color={sel.color}>
-            <CardName $mb="6px">{sr.name}</CardName>
-            <SubRaceStatRow>{Object.entries(sr.bonuses).map(([s, v]) => <MStat key={s} stat={s} value={v} />)}</SubRaceStatRow>
-            <CardDesc $size="12.5px">{sr.extra}</CardDesc>
-          </MCard>))}</Grid>
-      </>}
-      <MLabel>Racial Traits</MLabel>
-      <Grid>{sel.traits.map((t) => (
-        <MCard key={t.name}>
-          <CardName>{t.name}</CardName>
-          <CardDesc>{t.desc}</CardDesc>
-        </MCard>))}</Grid>
-      <MLabel>Pairs Well With</MLabel>
-      <ChipRow>{sel.bestClasses.map((c) => <NamedChip key={c}>{c}</NamedChip>)}</ChipRow>
-    </MDetail>
-  );
-  return (
-    <Grid $gap="9px">
-      {races.map((r) => (
-        <MRow key={r.id} color={r.color} badge={r.icon} title={r.name} sub={r.tagline} onClick={() => setSel(r)}
-          chips={Object.entries(r.statBonuses).slice(0, 3).map(([s, v]) => <MStat key={s} stat={s} value={v} />)} />
-      ))}
-    </Grid>
-  );
-};
-
-/* ── Classes ── */
 const InfoGridTwoCol = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -465,45 +375,6 @@ const FeatureName = styled.span`
   color: var(--text);
 `;
 
-export const MClasses = () => {
-  const { classes } = DND_DATA;
-  const [sel, setSel] = useState(null);
-  if (sel) return (
-    <MDetail title={sel.name} sub={sel.tagline} color={sel.color} onBack={() => setSel(null)}>
-      <Paragraph>{sel.description}</Paragraph>
-      <InfoGridTwoCol>
-        {[['Hit Die', sel.hitDie], ['Primary', sel.primaryAbility.join(', ')], ['Saves', sel.savingThrows.join(', ')], ['Difficulty', sel.difficulty]].map(([l, v]) => (
-          <MCard key={l}><MiniLabelSpaced>{l}</MiniLabelSpaced><MiniValue>{v}</MiniValue></MCard>))}
-      </InfoGridTwoCol>
-      <MLabel>Party Role</MLabel>
-      <MCard color={sel.color}><RoleText>{sel.role}</RoleText></MCard>
-      <MLabel>Proficiencies</MLabel>
-      <MCard>
-        <CardDesc $size="13px" $lh={1.6}><Strong>Armor: </Strong>{sel.armorProf}</CardDesc>
-        <CardDesc $size="13px" $lh={1.6} $mt="4px"><Strong>Weapons: </Strong>{sel.weaponProf}</CardDesc>
-      </MCard>
-      <MLabel>Key Features: Levels 1-5</MLabel>
-      <Grid $pb="8px">{sel.keyFeatures.map((f) => (
-        <MCard key={f.name}>
-          <FeatureRow>
-            <FeatureBadge $color={sel.color}>{f.level}</FeatureBadge>
-            <FeatureName>{f.name}</FeatureName>
-          </FeatureRow>
-          <CardDesc>{f.desc}</CardDesc>
-        </MCard>))}</Grid>
-    </MDetail>
-  );
-  return (
-    <Grid $gap="9px">
-      {classes.map((c) => (
-        <MRow key={c.id} color={c.color} badge={c.icon} title={c.name} sub={c.tagline} onClick={() => setSel(c)}
-          chips={<><MChip color={c.color} solid>HD {c.hitDie}</MChip>{c.primaryAbility.map((a) => <MChip key={a} color={c.color} solid>{a}</MChip>)}<MChip color={difficultyColors[c.difficulty]} solid>{c.difficulty}</MChip></>} />
-      ))}
-    </Grid>
-  );
-};
-
-/* ── Pairing ── */
 const PickerButton = styled.button`
   min-height: 44px;
   padding: 9px 15px;
@@ -603,60 +474,6 @@ const PairPlaceholder = styled.div`
   font-size: 14px;
 `;
 
-export const MPair = () => {
-  const { races, classes, pairings } = DND_DATA;
-  const [r, setR] = useState(null);
-  const [c, setC] = useState(null);
-  const res = r && c ? (pairings[r] || {})[c] : null;
-  const ro = races.find((x) => x.id === r);
-  const co = classes.find((x) => x.id === c);
-  const sc = res ? synergyColors[res.synergy] : '';
-  const picker = (items, val, set) => (
-    <HScroll>
-      {items.map((i) => (
-        <PickerButton key={i.id} onClick={() => set(i.id)} $active={val === i.id} $color={i.color}>{i.name}</PickerButton>
-      ))}
-    </HScroll>
-  );
-  return (
-    <div>
-      <MLabel>1. Pick a Race</MLabel>
-      {picker(races, r, setR)}
-      <MLabel>2. Pick a Class</MLabel>
-      {picker(classes, c, setC)}
-      <ResultWrap>
-        {res && ro && co ? (
-          <PairResultBox $color={sc}>
-            <PairNamesRow>
-              <PairName $color={ro.color}>{ro.name}</PairName>
-              <PairPlus>+</PairPlus>
-              <PairName $color={co.color}>{co.name}</PairName>
-            </PairNamesRow>
-            <SynergyRow>
-              {[1, 2, 3, 4, 5].map((i) => <SynergySegment key={i} $filled={i <= res.synergy} $color={sc} />)}
-            </SynergyRow>
-            <SynergyLabelText $color={sc}>{synergyLabels[res.synergy]}</SynergyLabelText>
-            <PairSummary>{res.summary}</PairSummary>
-            <MLabel>Highlights</MLabel>
-            <Grid>{res.highlights.map((h, i) => (
-              <HighlightRow key={i}>
-                <HighlightBullet $color={sc}>▸</HighlightBullet>
-                <HighlightText>{h}</HighlightText>
-              </HighlightRow>))}</Grid>
-            <MLabel>{ro.name} Bonuses</MLabel>
-            <StatRow>{Object.entries(ro.statBonuses).map(([s, v]) => <MStat key={s} stat={s} value={v} />)}</StatRow>
-          </PairResultBox>
-        ) : (
-          <PairPlaceholder>
-            {!r && !c ? 'Pick a race and a class to see how well they work together' : !r ? 'Now pick a race' : 'Now pick a class'}
-          </PairPlaceholder>
-        )}
-      </ResultWrap>
-    </div>
-  );
-};
-
-/* ── Spells ── */
 const SpellFilterButton = styled.button`
   min-height: 40px;
   padding: 8px 14px;
@@ -764,64 +581,6 @@ const SpellHint = styled.div`
   opacity: 0.8;
 `;
 
-export const MSpells = () => {
-  const { spells } = DND_DATA;
-  const [f, setF] = useState('All');
-  const [open, setOpen] = useState(null);
-  const list = useMemo(() => (f === 'All' ? spells : spells.filter((s) => s.school === f)), [f, spells]);
-  return (
-    <div>
-      <MCard>
-        <CardDesc $size="12.5px" $lh={1.6}>
-          <HeadingStrong>Save DC</HeadingStrong> = 8 + proficiency + spell mod. <HeadingStrong>Attack</HeadingStrong> = 1d20 + proficiency + spell mod.
-        </CardDesc>
-      </MCard>
-      <HScroll $mt="14px">
-        {['All', ...Object.keys(schoolColors)].map((s) => {
-          const a = f === s;
-          const col = schoolColors[s] || 'var(--accent)';
-          return <SpellFilterButton key={s} onClick={() => setF(s)} $active={a} $color={col} $hasColor={!!schoolColors[s]}>{s}</SpellFilterButton>;
-        })}
-      </HScroll>
-      <Grid $gap="9px" $mt="14px">
-        {list.map((sp) => {
-          const col = schoolColors[sp.school];
-          const o = open === sp.name;
-          const rollLabel = sp.roll ? rollTypeMeta[sp.roll.type]?.label : null;
-          return (
-            <SpellCard key={sp.name} onClick={() => setOpen(o ? null : sp.name)} $open={o} $color={col}>
-              <SpellHeadRow>
-                <SpellName>{sp.name}</SpellName>
-                <MChip color={col} solid>{['Cantrip', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th'][sp.level]}</MChip>
-              </SpellHeadRow>
-              <SpellMeta>{sp.school} · {sp.castingTime} · {sp.range}</SpellMeta>
-              {sp.roll && <RollChipsRow>
-                <MChip color={col} solid>{rollLabel}</MChip>
-                {sp.roll.save && <MChip>{sp.roll.save} save</MChip>}
-                {sp.roll.attack && <MChip>{sp.roll.attack}</MChip>}
-                {sp.roll.damage && <MChip>{sp.roll.damage}</MChip>}
-                {sp.roll.healing && <MChip>{sp.roll.healing}</MChip>}
-              </RollChipsRow>}
-              {o ? (
-                <SpellExpanded>
-                  <SpellDesc>{sp.desc}</SpellDesc>
-                  {sp.diceNote && <DiceNoteBox $color={col}>
-                    <DiceNoteTitle $color={col}>How to Roll</DiceNoteTitle>
-                    <DiceNoteText>{sp.diceNote}</DiceNoteText>
-                  </DiceNoteBox>}
-                  {sp.roll?.upcast && <UpcastLine><strong>Upcast: </strong><em>{sp.roll.upcast}</em></UpcastLine>}
-                  <SpellClasses>{sp.classes.join(', ')}</SpellClasses>
-                </SpellExpanded>
-              ) : <SpellHint $color={col}>Tap for details ▾</SpellHint>}
-            </SpellCard>
-          );
-        })}
-      </Grid>
-    </div>
-  );
-};
-
-/* ── Rules tab: Abilities / Actions / Round ── */
 const AbilityRow = styled.div`
   background: var(--surface);
   border: 1px solid ${(p) => (p.$open ? p.$color : 'var(--border)')};
@@ -894,47 +653,6 @@ const SavingThrowText = styled.div`
   font-style: italic;
   line-height: 1.55;
 `;
-
-const MAbilities = () => {
-  const { abilityScores } = DND_DATA;
-  const [open, setOpen] = useState(null);
-  return (
-    <div>
-      <MCard>
-        <CardDesc $size="12.5px" $lh={1.6}>
-          <HeadingStrong>Modifier</HeadingStrong> = (score − 10) ÷ 2, rounded down. Score 10 → +0. Score 16 → +3.
-        </CardDesc>
-      </MCard>
-      <Grid $gap="9px" $mt="14px">
-        {abilityScores.map((s) => {
-          const o = open === s.id;
-          return (
-            <AbilityRow key={s.id} onClick={() => setOpen(o ? null : s.id)} $open={o} $color={s.color}>
-              <AbilityRowHead>
-                <AbilityBadge $color={s.color}>{s.abbr}</AbilityBadge>
-                <Flex1>
-                  <RowTitle>{s.name}</RowTitle>
-                  <AbilityHint>{o ? 'Tap to collapse' : 'Tap for details'}</AbilityHint>
-                </Flex1>
-                <AbilityChevron>{o ? '▴' : '▾'}</AbilityChevron>
-              </AbilityRowHead>
-              {o && <AbilityExpanded>
-                <Paragraph $m="0">{s.description}</Paragraph>
-                <MLabel>What It Affects</MLabel>
-                <Grid $gap="6px">{s.uses.map((u, i) => (
-                  <UseRow key={i}><UseBullet $color={s.color}>▸</UseBullet><UseText>{u}</UseText></UseRow>))}</Grid>
-                {s.skills.length > 0 && <><MLabel>Skills</MLabel>
-                  <StatRow>{s.skills.map((k) => <MChip key={k} color={s.color} solid>{k}</MChip>)}</StatRow></>}
-                <MLabel>Saving Throw</MLabel>
-                <SavingThrowText>{s.savingThrow}</SavingThrowText>
-              </AbilityExpanded>}
-            </AbilityRow>
-          );
-        })}
-      </Grid>
-    </div>
-  );
-};
 
 const OverviewCard = styled.div`
   background: var(--surface);
@@ -1027,48 +745,6 @@ const ActionExample = styled.div`
   font-style: italic;
   margin-top: 8px;
 `;
-
-const MActions = () => {
-  const { actions } = DND_DATA;
-  return (
-    <div>
-      <Grid $gap="8px">
-        {[['Action', 'Your one main activity each turn.', '#c8743a'], ['Bonus Action', 'A secondary act, only if a feature grants one.', '#4a6fa5'], ['Reaction', 'One per round. Can trigger even off-turn.', '#8b3a3a']].map(([n, d, c]) => (
-          <OverviewCard key={n} $color={c}>
-            <OverviewName $color={c}>{n}</OverviewName>
-            <OverviewDesc>{d}</OverviewDesc>
-          </OverviewCard>))}
-      </Grid>
-      {actions.map((cat) => (
-        <div key={cat.category}>
-          <MLabel>{cat.category}</MLabel>
-          <Grid $gap="9px">
-            {cat.items.map((a) => {
-              const col = actionTypeColors[a.type] || Object.entries(actionTypeColors).find(([k]) => a.type.startsWith(k.split(' ')[0]))?.[1] || '#888';
-              return (
-                <ActionCard key={a.name} $color={col}>
-                  <ActionHeadRow>
-                    <ActionName>{a.name}</ActionName>
-                    <MChip color={col} solid>{a.type}</MChip>
-                  </ActionHeadRow>
-                  <CardDesc>{a.desc}</CardDesc>
-                  {a.dice && <DiceBox>
-                    <DiceRow>
-                      <DiceLabel>Rolls</DiceLabel>
-                      {a.dice.map((d, i) => <DiceChip key={i} $color={col}>{d}</DiceChip>)}
-                    </DiceRow>
-                    {a.diceNote && <DiceNoteInline>{a.diceNote}</DiceNoteInline>}
-                  </DiceBox>}
-                  <ActionExample>e.g. {a.example}</ActionExample>
-                </ActionCard>
-              );
-            })}
-          </Grid>
-        </div>
-      ))}
-    </div>
-  );
-};
 
 const InitiativeBox = styled.div`
   background: var(--surface);
@@ -1202,6 +878,346 @@ const DicePrimerBox = styled.div`
   justify-content: center;
 `;
 
+const RulesTabBar = styled.div`
+  display: flex;
+  gap: 4px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 4px;
+  margin-bottom: 16px;
+`;
+
+const RulesTabButton = styled.button`
+  flex: 1;
+  min-height: 38px;
+  border-radius: 6px;
+  border: none;
+  background: ${(p) => (p.$active ? 'var(--accent-subtle)' : 'transparent')};
+  color: ${(p) => (p.$active ? 'var(--accent)' : 'var(--text-muted)')};
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: ${(p) => (p.$active ? 700 : 400)};
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+`;
+
+const MStat = ({ stat, value }) => (
+  <StatWrap><StatLabel>{stat}</StatLabel>+{value}</StatWrap>
+);
+
+const MChip = ({ children, color, solid }) => <ChipWrap $color={color} $solid={solid}>{children}</ChipWrap>;
+
+const MDie = ({ sides, label }) => (
+  <DieWrap>
+    <DieShape $shape={dieShapes[sides]}>d{sides}</DieShape>
+    {label && <DieLabel>{label}</DieLabel>}
+  </DieWrap>
+);
+
+const MRow = ({ color, badge, title, sub, chips, onClick }) => (
+  <RowButton onClick={onClick} $color={color}>
+    <RowBadge $color={color}>{badge}</RowBadge>
+    <RowContent>
+      <RowTitle>{title}</RowTitle>
+      <RowSub>{sub}</RowSub>
+      <RowChips>{chips}</RowChips>
+    </RowContent>
+    <RowChevron>›</RowChevron>
+  </RowButton>
+);
+
+const MDetail = ({ title, sub, color, onBack, children }) => createPortal(
+  <Sheet>
+    <SheetHead>
+      <BackButton onClick={onBack}>‹ Back</BackButton>
+    </SheetHead>
+    <SheetBody>
+      <SheetHeader $color={color}>
+        <SheetTitle>{title}</SheetTitle>
+        <SheetSub>{sub}</SheetSub>
+      </SheetHeader>
+      {children}
+    </SheetBody>
+  </Sheet>,
+  document.body,
+);
+
+const MCard = ({ children, color }) => <CardWrap $color={color}>{children}</CardWrap>;
+
+export const MRaces = () => {
+  const { races } = DND_DATA;
+  const [sel, setSel] = useState(null);
+  if (sel) return (
+    <MDetail title={sel.name} sub={sel.tagline} color={sel.color} onBack={() => setSel(null)}>
+      <Paragraph>{sel.description}</Paragraph>
+      <MLabel>Ability Bonuses</MLabel>
+      <StatRow>{Object.entries(sel.statBonuses).map(([s, v]) => <MStat key={s} stat={s} value={v} />)}</StatRow>
+      {sel.extraBonuses && <ExtraNote>{sel.extraBonuses}</ExtraNote>}
+      <SizeSpeedRow>
+        <MCard><MiniLabel>Size</MiniLabel><MiniValue>{sel.size}</MiniValue></MCard>
+        <MCard><MiniLabel>Speed</MiniLabel><MiniValue>{sel.speed} ft</MiniValue></MCard>
+      </SizeSpeedRow>
+      {sel.subRaces && <>
+        <MLabel>Subraces</MLabel>
+        <Grid>{sel.subRaces.map((sr) => (
+          <MCard key={sr.name} color={sel.color}>
+            <CardName $mb="6px">{sr.name}</CardName>
+            <SubRaceStatRow>{Object.entries(sr.bonuses).map(([s, v]) => <MStat key={s} stat={s} value={v} />)}</SubRaceStatRow>
+            <CardDesc $size="12.5px">{sr.extra}</CardDesc>
+          </MCard>))}</Grid>
+      </>}
+      <MLabel>Racial Traits</MLabel>
+      <Grid>{sel.traits.map((t) => (
+        <MCard key={t.name}>
+          <CardName>{t.name}</CardName>
+          <CardDesc>{t.desc}</CardDesc>
+        </MCard>))}</Grid>
+      <MLabel>Pairs Well With</MLabel>
+      <ChipRow>{sel.bestClasses.map((c) => <NamedChip key={c}>{c}</NamedChip>)}</ChipRow>
+    </MDetail>
+  );
+  return (
+    <Grid $gap="9px">
+      {races.map((r) => (
+        <MRow key={r.id} color={r.color} badge={r.icon} title={r.name} sub={r.tagline} onClick={() => setSel(r)}
+          chips={Object.entries(r.statBonuses).slice(0, 3).map(([s, v]) => <MStat key={s} stat={s} value={v} />)} />
+      ))}
+    </Grid>
+  );
+};
+
+export const MClasses = () => {
+  const { classes } = DND_DATA;
+  const [sel, setSel] = useState(null);
+  if (sel) return (
+    <MDetail title={sel.name} sub={sel.tagline} color={sel.color} onBack={() => setSel(null)}>
+      <Paragraph>{sel.description}</Paragraph>
+      <InfoGridTwoCol>
+        {[['Hit Die', sel.hitDie], ['Primary', sel.primaryAbility.join(', ')], ['Saves', sel.savingThrows.join(', ')], ['Difficulty', sel.difficulty]].map(([l, v]) => (
+          <MCard key={l}><MiniLabelSpaced>{l}</MiniLabelSpaced><MiniValue>{v}</MiniValue></MCard>))}
+      </InfoGridTwoCol>
+      <MLabel>Party Role</MLabel>
+      <MCard color={sel.color}><RoleText>{sel.role}</RoleText></MCard>
+      <MLabel>Proficiencies</MLabel>
+      <MCard>
+        <CardDesc $size="13px" $lh={1.6}><Strong>Armor: </Strong>{sel.armorProf}</CardDesc>
+        <CardDesc $size="13px" $lh={1.6} $mt="4px"><Strong>Weapons: </Strong>{sel.weaponProf}</CardDesc>
+      </MCard>
+      <MLabel>Key Features: Levels 1-5</MLabel>
+      <Grid $pb="8px">{sel.keyFeatures.map((f) => (
+        <MCard key={f.name}>
+          <FeatureRow>
+            <FeatureBadge $color={sel.color}>{f.level}</FeatureBadge>
+            <FeatureName>{f.name}</FeatureName>
+          </FeatureRow>
+          <CardDesc>{f.desc}</CardDesc>
+        </MCard>))}</Grid>
+    </MDetail>
+  );
+  return (
+    <Grid $gap="9px">
+      {classes.map((c) => (
+        <MRow key={c.id} color={c.color} badge={c.icon} title={c.name} sub={c.tagline} onClick={() => setSel(c)}
+          chips={<><MChip color={c.color} solid>HD {c.hitDie}</MChip>{c.primaryAbility.map((a) => <MChip key={a} color={c.color} solid>{a}</MChip>)}<MChip color={difficultyColors[c.difficulty]} solid>{c.difficulty}</MChip></>} />
+      ))}
+    </Grid>
+  );
+};
+
+export const MPair = () => {
+  const { races, classes, pairings } = DND_DATA;
+  const [r, setR] = useState(null);
+  const [c, setC] = useState(null);
+  const res = r && c ? (pairings[r] || {})[c] : null;
+  const ro = races.find((x) => x.id === r);
+  const co = classes.find((x) => x.id === c);
+  const sc = res ? synergyColors[res.synergy] : '';
+  const picker = (items, val, set) => (
+    <HScroll>
+      {items.map((i) => (
+        <PickerButton key={i.id} onClick={() => set(i.id)} $active={val === i.id} $color={i.color}>{i.name}</PickerButton>
+      ))}
+    </HScroll>
+  );
+  return (
+    <div>
+      <MLabel>1. Pick a Race</MLabel>
+      {picker(races, r, setR)}
+      <MLabel>2. Pick a Class</MLabel>
+      {picker(classes, c, setC)}
+      <ResultWrap>
+        {res && ro && co ? (
+          <PairResultBox $color={sc}>
+            <PairNamesRow>
+              <PairName $color={ro.color}>{ro.name}</PairName>
+              <PairPlus>+</PairPlus>
+              <PairName $color={co.color}>{co.name}</PairName>
+            </PairNamesRow>
+            <SynergyRow>
+              {[1, 2, 3, 4, 5].map((i) => <SynergySegment key={i} $filled={i <= res.synergy} $color={sc} />)}
+            </SynergyRow>
+            <SynergyLabelText $color={sc}>{synergyLabels[res.synergy]}</SynergyLabelText>
+            <PairSummary>{res.summary}</PairSummary>
+            <MLabel>Highlights</MLabel>
+            <Grid>{res.highlights.map((h, i) => (
+              <HighlightRow key={i}>
+                <HighlightBullet $color={sc}>▸</HighlightBullet>
+                <HighlightText>{h}</HighlightText>
+              </HighlightRow>))}</Grid>
+            <MLabel>{ro.name} Bonuses</MLabel>
+            <StatRow>{Object.entries(ro.statBonuses).map(([s, v]) => <MStat key={s} stat={s} value={v} />)}</StatRow>
+          </PairResultBox>
+        ) : (
+          <PairPlaceholder>
+            {!r && !c ? 'Pick a race and a class to see how well they work together' : !r ? 'Now pick a race' : 'Now pick a class'}
+          </PairPlaceholder>
+        )}
+      </ResultWrap>
+    </div>
+  );
+};
+
+export const MSpells = () => {
+  const { spells } = DND_DATA;
+  const [f, setF] = useState('All');
+  const [open, setOpen] = useState(null);
+  const list = useMemo(() => (f === 'All' ? spells : spells.filter((s) => s.school === f)), [f, spells]);
+  return (
+    <div>
+      <MCard>
+        <CardDesc $size="12.5px" $lh={1.6}>
+          <HeadingStrong>Save DC</HeadingStrong> = 8 + proficiency + spell mod. <HeadingStrong>Attack</HeadingStrong> = 1d20 + proficiency + spell mod.
+        </CardDesc>
+      </MCard>
+      <HScroll $mt="14px">
+        {spellSchools.map((s) => {
+          const a = f === s;
+          const col = schoolColors[s] || 'var(--accent)';
+          return <SpellFilterButton key={s} onClick={() => setF(s)} $active={a} $color={col} $hasColor={!!schoolColors[s]}>{s}</SpellFilterButton>;
+        })}
+      </HScroll>
+      <Grid $gap="9px" $mt="14px">
+        {list.map((sp) => {
+          const col = schoolColors[sp.school];
+          const o = open === sp.name;
+          const rollLabel = sp.roll ? rollTypeMeta[sp.roll.type]?.label : null;
+          return (
+            <SpellCard key={sp.name} onClick={() => setOpen(o ? null : sp.name)} $open={o} $color={col}>
+              <SpellHeadRow>
+                <SpellName>{sp.name}</SpellName>
+                <MChip color={col} solid>{spellLevelLabels[sp.level]}</MChip>
+              </SpellHeadRow>
+              <SpellMeta>{sp.school} · {sp.castingTime} · {sp.range}</SpellMeta>
+              {sp.roll && <RollChipsRow>
+                <MChip color={col} solid>{rollLabel}</MChip>
+                {sp.roll.save && <MChip>{sp.roll.save} save</MChip>}
+                {sp.roll.attack && <MChip>{sp.roll.attack}</MChip>}
+                {sp.roll.damage && <MChip>{sp.roll.damage}</MChip>}
+                {sp.roll.healing && <MChip>{sp.roll.healing}</MChip>}
+              </RollChipsRow>}
+              {o ? (
+                <SpellExpanded>
+                  <SpellDesc>{sp.desc}</SpellDesc>
+                  {sp.diceNote && <DiceNoteBox $color={col}>
+                    <DiceNoteTitle $color={col}>How to Roll</DiceNoteTitle>
+                    <DiceNoteText>{sp.diceNote}</DiceNoteText>
+                  </DiceNoteBox>}
+                  {sp.roll?.upcast && <UpcastLine><strong>Upcast: </strong><em>{sp.roll.upcast}</em></UpcastLine>}
+                  <SpellClasses>{sp.classes.join(', ')}</SpellClasses>
+                </SpellExpanded>
+              ) : <SpellHint $color={col}>Tap for details ▾</SpellHint>}
+            </SpellCard>
+          );
+        })}
+      </Grid>
+    </div>
+  );
+};
+
+const MAbilities = () => {
+  const { abilityScores } = DND_DATA;
+  const [open, setOpen] = useState(null);
+  return (
+    <div>
+      <MCard>
+        <CardDesc $size="12.5px" $lh={1.6}>
+          <HeadingStrong>Modifier</HeadingStrong> = (score − 10) ÷ 2, rounded down. Score 10 → +0. Score 16 → +3.
+        </CardDesc>
+      </MCard>
+      <Grid $gap="9px" $mt="14px">
+        {abilityScores.map((s) => {
+          const o = open === s.id;
+          return (
+            <AbilityRow key={s.id} onClick={() => setOpen(o ? null : s.id)} $open={o} $color={s.color}>
+              <AbilityRowHead>
+                <AbilityBadge $color={s.color}>{s.abbr}</AbilityBadge>
+                <Flex1>
+                  <RowTitle>{s.name}</RowTitle>
+                  <AbilityHint>{o ? 'Tap to collapse' : 'Tap for details'}</AbilityHint>
+                </Flex1>
+                <AbilityChevron>{o ? '▴' : '▾'}</AbilityChevron>
+              </AbilityRowHead>
+              {o && <AbilityExpanded>
+                <Paragraph $m="0">{s.description}</Paragraph>
+                <MLabel>What It Affects</MLabel>
+                <Grid $gap="6px">{s.uses.map((u, i) => (
+                  <UseRow key={i}><UseBullet $color={s.color}>▸</UseBullet><UseText>{u}</UseText></UseRow>))}</Grid>
+                {s.skills.length > 0 && <><MLabel>Skills</MLabel>
+                  <StatRow>{s.skills.map((k) => <MChip key={k} color={s.color} solid>{k}</MChip>)}</StatRow></>}
+                <MLabel>Saving Throw</MLabel>
+                <SavingThrowText>{s.savingThrow}</SavingThrowText>
+              </AbilityExpanded>}
+            </AbilityRow>
+          );
+        })}
+      </Grid>
+    </div>
+  );
+};
+
+const MActions = () => {
+  const { actions } = DND_DATA;
+  return (
+    <div>
+      <Grid $gap="8px">
+        {[['Action', 'Your one main activity each turn.', '#c8743a'], ['Bonus Action', 'A secondary act, only if a feature grants one.', '#4a6fa5'], ['Reaction', 'One per round. Can trigger even off-turn.', '#8b3a3a']].map(([n, d, c]) => (
+          <OverviewCard key={n} $color={c}>
+            <OverviewName $color={c}>{n}</OverviewName>
+            <OverviewDesc>{d}</OverviewDesc>
+          </OverviewCard>))}
+      </Grid>
+      {actions.map((cat) => (
+        <div key={cat.category}>
+          <MLabel>{cat.category}</MLabel>
+          <Grid $gap="9px">
+            {cat.items.map((a) => {
+              const col = actionTypeColors[a.type] || Object.entries(actionTypeColors).find(([k]) => a.type.startsWith(k.split(' ')[0]))?.[1] || '#888';
+              return (
+                <ActionCard key={a.name} $color={col}>
+                  <ActionHeadRow>
+                    <ActionName>{a.name}</ActionName>
+                    <MChip color={col} solid>{a.type}</MChip>
+                  </ActionHeadRow>
+                  <CardDesc>{a.desc}</CardDesc>
+                  {a.dice && <DiceBox>
+                    <DiceRow>
+                      <DiceLabel>Rolls</DiceLabel>
+                      {a.dice.map((d, i) => <DiceChip key={i} $color={col}>{d}</DiceChip>)}
+                    </DiceRow>
+                    {a.diceNote && <DiceNoteInline>{a.diceNote}</DiceNoteInline>}
+                  </DiceBox>}
+                  <ActionExample>e.g. {a.example}</ActionExample>
+                </ActionCard>
+              );
+            })}
+          </Grid>
+        </div>
+      ))}
+    </div>
+  );
+};
+
 const MRound = () => {
   const { rounds } = DND_DATA;
   return (
@@ -1252,30 +1268,6 @@ const MRound = () => {
     </div>
   );
 };
-
-const RulesTabBar = styled.div`
-  display: flex;
-  gap: 4px;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 9px;
-  padding: 4px;
-  margin-bottom: 16px;
-`;
-
-const RulesTabButton = styled.button`
-  flex: 1;
-  min-height: 38px;
-  border-radius: 6px;
-  border: none;
-  background: ${(p) => (p.$active ? 'var(--accent-subtle)' : 'transparent')};
-  color: ${(p) => (p.$active ? 'var(--accent)' : 'var(--text-muted)')};
-  font-family: var(--font-heading);
-  font-size: 13px;
-  font-weight: ${(p) => (p.$active ? 700 : 400)};
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-`;
 
 export const MRules = () => {
   const [tab, setTab] = useState('abilities');
