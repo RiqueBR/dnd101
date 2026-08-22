@@ -1,6 +1,14 @@
 # Testing strategy (BDD-style)
 
-Stack: Vitest + `@testing-library/react` + jsdom (see `src/test/setup.js`). Run with `npm test` (single run) or `npm run test:watch` while developing.
+Stack: Vitest + `@testing-library/react` + jsdom (see `src/test/setup.js`).
+
+## Commands
+
+- `npm test` — run the full test suite once
+- `npm run test:watch` — watch mode, use while developing
+- `npm run lint` — oxlint
+
+Run `npm test` and `npm run lint` before considering any change done — don't wait until PR time to discover a failure.
 
 ## Structure
 
