@@ -1,6 +1,9 @@
 import { useState, useMemo } from 'react';
 import { DND_DATA } from '../../data/dndData.js';
 import { Label, StatBadge, RaceCard, ClassCard, DetailPanel } from './Cards.jsx';
+import { SCHOOL_COLORS, SPELL_SCHOOLS, SPELL_LEVEL_LABELS, ROLL_TYPE_META } from '../../data/spellDisplay.js';
+import { ACTION_TYPE_COLORS } from '../../data/actionDisplay.js';
+import { SYNERGY_LABELS, SYNERGY_COLORS } from '../../data/pairingDisplay.js';
 
 export const SectionHeader = ({ title, subtitle }) => (
   <div style={{ marginBottom: 24 }}>
@@ -96,20 +99,6 @@ export const AbilityScoresSection = () => {
 };
 
 // ── Spells ─────────────────────────────────────────────
-const SCHOOL_COLORS = { Evocation:'#c8743a', Abjuration:'#4a6fa5', Conjuration:'#4a7a2a', Illusion:'#6b3a8b', Enchantment:'#8b3a6b', Necromancy:'#3a6b5a', Divination:'#8b7a1a', Transmutation:'#5a7a8b' };
-const LEVEL_LABELS = ['Cantrip','1st','2nd','3rd','4th','5th','6th','7th','8th','9th'];
-const SCHOOLS = ['All','Evocation','Abjuration','Conjuration','Illusion','Enchantment','Necromancy','Divination','Transmutation'];
-
-const ROLL_TYPE_META = {
-  attack:      { label: 'Attack Roll', color: '#c8743a' },
-  save:        { label: 'Save vs DC',  color: '#8b3a3a' },
-  heal:        { label: 'Healing',     color: '#4a7a2a' },
-  auto:        { label: 'Auto-Hit',    color: '#6b3a8b' },
-  conditional: { label: 'Conditional', color: '#8b7a1a' },
-  buff:        { label: 'Buff',        color: '#4a6fa5' },
-  utility:     { label: 'Utility',     color: '#5a7a8b' },
-};
-
 export const SpellsSection = () => {
   const { spells } = DND_DATA;
   const [filter, setFilter] = useState('All');
@@ -128,7 +117,7 @@ export const SpellsSection = () => {
       </div>
 
       <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginBottom: 20 }}>
-        {SCHOOLS.map(s => {
+        {SPELL_SCHOOLS.map(s => {
           const active = filter === s;
           const c = SCHOOL_COLORS[s];
           return (
@@ -153,7 +142,7 @@ export const SpellsSection = () => {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6 }}>
                 <div style={{ fontFamily: 'var(--font-heading)', fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>{spell.name}</div>
                 <div style={{ display: 'flex', gap: 4, flexShrink: 0, marginLeft: 8 }}>
-                  <span style={{ padding: '1px 6px', borderRadius: 3, fontSize: 9, fontWeight: 700, background: c + '22', color: c, border: `1px solid ${c}33` }}>{LEVEL_LABELS[spell.level]}</span>
+                  <span style={{ padding: '1px 6px', borderRadius: 3, fontSize: 9, fontWeight: 700, background: c + '22', color: c, border: `1px solid ${c}33` }}>{SPELL_LEVEL_LABELS[spell.level]}</span>
                   <span style={{ padding: '1px 6px', borderRadius: 3, fontSize: 9, fontWeight: 600, background: 'var(--surface2)', color: 'var(--text-muted)', border: '1px solid var(--border)' }}>{spell.school}</span>
                 </div>
               </div>
@@ -201,8 +190,6 @@ export const SpellsSection = () => {
 };
 
 // ── Actions ────────────────────────────────────────────
-const TYPE_COLORS = { 'Action':'#c8743a', 'Bonus Action':'#4a6fa5', 'Reaction':'#8b3a3a', 'Free':'#4a7a2a', 'Action / Bonus / Reaction':'#6b3a8b' };
-
 export const ActionsSection = () => {
   const { actions } = DND_DATA;
   return (
@@ -224,8 +211,8 @@ export const ActionsSection = () => {
           <h3 style={{ fontFamily: 'var(--font-heading)', color: 'var(--accent)', fontSize: 12, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 10, borderBottom: '1px solid var(--border)', paddingBottom: 7 }}>{cat.category}</h3>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 9 }}>
             {cat.items.map(a => {
-              const typeKey = Object.keys(TYPE_COLORS).find(k => a.type.includes(k.split(' ')[0])) || 'Action';
-              const color = TYPE_COLORS[a.type] || TYPE_COLORS[typeKey] || '#888';
+              const typeKey = Object.keys(ACTION_TYPE_COLORS).find(k => a.type.includes(k.split(' ')[0])) || 'Action';
+              const color = ACTION_TYPE_COLORS[a.type] || ACTION_TYPE_COLORS[typeKey] || '#888';
               return (
                 <div key={a.name} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderLeft: `3px solid ${color}`, borderRadius: 6, padding: '11px 13px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 5 }}>
@@ -384,10 +371,8 @@ export const PairingSection = () => {
 
   const raceObj = races.find(r => r.id === selRace);
   const classObj = classes.find(c => c.id === selClass);
-  const LABELS = ['','Poor fit','Below average','Decent match','Strong synergy','Excellent match'];
-  const COLORS = ['','#8b3a3a','#8b6a1a','#6b7a3a','#3a7a6b','#4a6fa5'];
-  const synColor = result ? COLORS[result.synergy] : '';
-  const synLabel = result ? LABELS[result.synergy] : '';
+  const synColor = result ? SYNERGY_COLORS[result.synergy] : '';
+  const synLabel = result ? SYNERGY_LABELS[result.synergy] : '';
 
   return (
     <div>

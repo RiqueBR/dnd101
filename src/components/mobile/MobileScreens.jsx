@@ -1,6 +1,10 @@
 import { useState, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { DND_DATA } from '../../data/dndData.js';
+import { SCHOOL_COLORS, SPELL_SCHOOLS, SPELL_LEVEL_LABELS, ROLL_TYPE_META } from '../../data/spellDisplay.js';
+import { ACTION_TYPE_COLORS } from '../../data/actionDisplay.js';
+import { DIFFICULTY_COLORS } from '../../data/classDisplay.js';
+import { SYNERGY_LABELS, SYNERGY_COLORS } from '../../data/pairingDisplay.js';
 
 /* ── shared bits (M- prefixed to avoid collisions) ── */
 const MStat = ({ stat, value }) => (
@@ -106,7 +110,7 @@ export const MRaces = () => {
 export const MClasses = () => {
   const { classes } = DND_DATA;
   const [sel, setSel] = useState(null);
-  const diffColor = d => ({Beginner:'#4a7a2a',Intermediate:'#8b7a1a',Advanced:'#8b3a3a'}[d]);
+  const diffColor = d => DIFFICULTY_COLORS[d];
   if (sel) return (
     <MDetail title={sel.name} sub={sel.tagline} color={sel.color} onBack={()=>setSel(null)}>
       <p style={{fontSize:15,lineHeight:1.65,color:'var(--text)',margin:'14px 0 0'}}>{sel.description}</p>
@@ -148,9 +152,7 @@ export const MPair = () => {
   const [r, setR] = useState(null), [c, setC] = useState(null);
   const res = r && c ? (pairings[r]||{})[c] : null;
   const ro = races.find(x=>x.id===r), co = classes.find(x=>x.id===c);
-  const LABELS=['','Poor fit','Below average','Decent match','Strong synergy','Excellent match'];
-  const COLORS=['','#8b3a3a','#8b6a1a','#6b7a3a','#3a7a6b','#4a6fa5'];
-  const sc = res?COLORS[res.synergy]:'';
+  const sc = res?SYNERGY_COLORS[res.synergy]:'';
   const picker = (items, val, set) => (
     <div className="m-hscroll">
       {items.map(i=>(
@@ -175,7 +177,7 @@ export const MPair = () => {
           <div style={{display:'flex',gap:4,alignItems:'center',marginBottom:6}}>
             {[1,2,3,4,5].map(i=><div key={i} style={{flex:1,height:7,borderRadius:4,background:i<=res.synergy?sc:'var(--surface2)',border:`1px solid ${i<=res.synergy?sc:'var(--border)'}`}}/>)}
           </div>
-          <div style={{fontSize:13,fontWeight:700,color:sc,fontFamily:'var(--font-heading)',marginBottom:13}}>{LABELS[res.synergy]}</div>
+          <div style={{fontSize:13,fontWeight:700,color:sc,fontFamily:'var(--font-heading)',marginBottom:13}}>{SYNERGY_LABELS[res.synergy]}</div>
           <p style={{fontSize:14.5,color:'var(--text)',lineHeight:1.65,margin:'0 0 4px'}}>{res.summary}</p>
           <MLabel>Highlights</MLabel>
           <div style={{display:'grid',gap:8}}>{res.highlights.map((h,i)=>(
@@ -197,10 +199,6 @@ export const MPair = () => {
 };
 
 /* ── Spells ── */
-const M_SCHOOL={Evocation:'#c8743a',Abjuration:'#4a6fa5',Conjuration:'#4a7a2a',Illusion:'#6b3a8b',Enchantment:'#8b3a6b',Necromancy:'#3a6b5a',Divination:'#8b7a1a',Transmutation:'#5a7a8b'};
-const M_LVL=['Cantrip','1st','2nd','3rd','4th','5th','6th','7th','8th','9th'];
-const M_ROLL={attack:'Attack Roll',save:'Save vs DC',heal:'Healing',auto:'Auto-Hit',conditional:'Conditional',buff:'Buff',utility:'Utility'};
-
 export const MSpells = () => {
   const { spells } = DND_DATA;
   const [f, setF] = useState('All');
@@ -212,23 +210,23 @@ export const MSpells = () => {
         <strong style={{color:'var(--text)',fontFamily:'var(--font-heading)'}}>Save DC</strong> = 8 + proficiency + spell mod. <strong style={{color:'var(--text)',fontFamily:'var(--font-heading)'}}>Attack</strong> = 1d20 + proficiency + spell mod.
       </div></MCard>
       <div className="m-hscroll" style={{marginTop:14}}>
-        {['All',...Object.keys(M_SCHOOL)].map(s=>{
-          const a=f===s, col=M_SCHOOL[s]||'var(--accent)';
-          return <button key={s} onClick={()=>setF(s)} style={{minHeight:40,padding:'8px 14px',borderRadius:7,flexShrink:0,background:a?(M_SCHOOL[s]?col+'22':'var(--accent-subtle)'):'var(--surface)',border:`1px solid ${a?col:'var(--border)'}`,color:a?col:'var(--text-muted)',fontFamily:'var(--font-heading)',fontSize:13,cursor:'pointer',WebkitTapHighlightColor:'transparent'}}>{s}</button>;
+        {SPELL_SCHOOLS.map(s=>{
+          const a=f===s, col=SCHOOL_COLORS[s]||'var(--accent)';
+          return <button key={s} onClick={()=>setF(s)} style={{minHeight:40,padding:'8px 14px',borderRadius:7,flexShrink:0,background:a?(SCHOOL_COLORS[s]?col+'22':'var(--accent-subtle)'):'var(--surface)',border:`1px solid ${a?col:'var(--border)'}`,color:a?col:'var(--text-muted)',fontFamily:'var(--font-heading)',fontSize:13,cursor:'pointer',WebkitTapHighlightColor:'transparent'}}>{s}</button>;
         })}
       </div>
       <div style={{display:'grid',gap:9,marginTop:14}}>
         {list.map(sp=>{
-          const col=M_SCHOOL[sp.school], o=open===sp.name;
+          const col=SCHOOL_COLORS[sp.school], o=open===sp.name;
           return (
             <div key={sp.name} onClick={()=>setOpen(o?null:sp.name)} style={{background:'var(--surface)',border:`1px solid ${o?col:'var(--border)'}`,borderLeft:`3px solid ${col}`,borderRadius:10,padding:'13px 14px',cursor:'pointer',WebkitTapHighlightColor:'transparent'}}>
               <div style={{display:'flex',justifyContent:'space-between',gap:8,alignItems:'flex-start'}}>
                 <div style={{fontFamily:'var(--font-heading)',fontSize:16,fontWeight:700,color:'var(--text)'}}>{sp.name}</div>
-                <MChip color={col} solid>{M_LVL[sp.level]}</MChip>
+                <MChip color={col} solid>{SPELL_LEVEL_LABELS[sp.level]}</MChip>
               </div>
               <div style={{fontSize:11.5,color:'var(--text-muted)',marginTop:5}}>{sp.school} · {sp.castingTime} · {sp.range}</div>
               {sp.roll && <div style={{display:'flex',gap:5,flexWrap:'wrap',marginTop:8}}>
-                <MChip color={col} solid>{M_ROLL[sp.roll.type]}</MChip>
+                <MChip color={col} solid>{ROLL_TYPE_META[sp.roll.type]?.label}</MChip>
                 {sp.roll.save && <MChip>{sp.roll.save} save</MChip>}
                 {sp.roll.attack && <MChip>{sp.roll.attack}</MChip>}
                 {sp.roll.damage && <MChip>{sp.roll.damage}</MChip>}
@@ -293,7 +291,6 @@ const MAbilities = () => {
   );
 };
 
-const M_TYPE={'Action':'#c8743a','Bonus Action':'#4a6fa5','Reaction':'#8b3a3a','Free':'#4a7a2a'};
 const MActions = () => {
   const { actions } = DND_DATA;
   return (
@@ -310,7 +307,7 @@ const MActions = () => {
           <MLabel>{cat.category}</MLabel>
           <div style={{display:'grid',gap:9}}>
             {cat.items.map(a=>{
-              const col=M_TYPE[a.type]||Object.entries(M_TYPE).find(([k])=>a.type.startsWith(k.split(' ')[0]))?.[1]||'#888';
+              const col=ACTION_TYPE_COLORS[a.type]||Object.entries(ACTION_TYPE_COLORS).find(([k])=>a.type.startsWith(k.split(' ')[0]))?.[1]||'#888';
               return (
                 <div key={a.name} style={{background:'var(--surface)',border:'1px solid var(--border)',borderLeft:`3px solid ${col}`,borderRadius:9,padding:'12px 14px'}}>
                   <div style={{display:'flex',justifyContent:'space-between',gap:8,alignItems:'flex-start',marginBottom:6}}>

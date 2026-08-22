@@ -8,16 +8,7 @@ import {
   ActionsSection,
   PairingSection,
 } from './Sections.jsx';
-
-const NAV = [
-  { id: 'races', label: 'Races', icon: '◈' },
-  { id: 'classes', label: 'Classes', icon: '⚔' },
-  { id: 'pairings', label: 'Race + Class', icon: '◎' },
-  { id: 'abilities', label: 'Ability Scores', icon: '◉' },
-  { id: 'actions', label: 'Actions', icon: '◆' },
-  { id: 'spells', label: 'Spells', icon: '✦' },
-  { id: 'rounds', label: 'Anatomy of a Round', icon: '⦿', highlight: true },
-];
+import { DESKTOP_NAV } from '../../data/navigation.js';
 
 const SECTIONS = {
   races: RacesSection,
@@ -68,7 +59,7 @@ export function DesktopApp({ theme, toggleTheme }) {
         </div>
 
         <nav style={{ padding: '12px 10px', flex: 1 }}>
-          {NAV.map(item => {
+          {DESKTOP_NAV.map(item => {
             const active = section === item.id;
             const isHighlight = item.highlight;
             return (

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { DIFFICULTY_COLORS } from '../../data/classDisplay.js';
 
 export const Label = ({ children }) => (
   <div style={{ fontFamily: 'var(--font-heading)', color: 'var(--accent)', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 8, marginTop: 4 }}>
@@ -19,8 +20,7 @@ export const StatBadge = ({ stat, value }) => (
 );
 
 export const DifficultyBadge = ({ level }) => {
-  const map = { 'Beginner': '#4a7a2a', 'Intermediate': '#8b7a1a', 'Advanced': '#8b3a3a' };
-  const c = map[level] || '#888';
+  const c = DIFFICULTY_COLORS[level] || '#888';
   return (
     <span style={{
       padding: '2px 8px', borderRadius: 4, fontSize: 10, fontWeight: 700,
