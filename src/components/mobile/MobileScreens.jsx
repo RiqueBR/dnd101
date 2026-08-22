@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { DND_DATA } from '../../data/dndData.js';
 
 /* ── shared bits (M- prefixed to avoid collisions) ── */
@@ -37,7 +38,7 @@ const MRow = ({ color, badge, title, sub, chips, onClick }) => (
 );
 
 /* full-screen detail sheet */
-const MDetail = ({ title, sub, color, onBack, children }) => (
+const MDetail = ({ title, sub, color, onBack, children }) => createPortal(
   <div className="m-sheet">
     <div className="m-sheet-head">
       <button onClick={onBack} style={{display:'flex',alignItems:'center',gap:5,minHeight:44,padding:'0 12px 0 4px',background:'none',border:'none',color:'var(--accent)',fontSize:15,fontFamily:'var(--font-heading)',cursor:'pointer'}}>‹ Back</button>
@@ -49,7 +50,8 @@ const MDetail = ({ title, sub, color, onBack, children }) => (
       </div>
       {children}
     </div>
-  </div>
+  </div>,
+  document.body
 );
 
 const MCard = ({ children, color }) => (
