@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import { DND_DATA } from '../../data/dndData.js';
 import { slideIn } from '../../styles/keyframes.js';
-import { schoolColors, rollTypeMeta, actionTypeColors, synergyLabels, synergyColors, dieShapes, difficultyColors } from '../../styles/tokens.js';
+import { schoolColors, rollTypeMeta, actionTypeColors, synergyLabels, synergyColors, dieShapes, difficultyColors, spellSchools, spellLevelLabels } from '../../styles/tokens.js';
 
 const StatWrap = styled.span`
   display: inline-flex;
@@ -1091,7 +1091,7 @@ export const MSpells = () => {
         </CardDesc>
       </MCard>
       <HScroll $mt="14px">
-        {['All', ...Object.keys(schoolColors)].map((s) => {
+        {spellSchools.map((s) => {
           const a = f === s;
           const col = schoolColors[s] || 'var(--accent)';
           return <SpellFilterButton key={s} onClick={() => setF(s)} $active={a} $color={col} $hasColor={!!schoolColors[s]}>{s}</SpellFilterButton>;
@@ -1106,7 +1106,7 @@ export const MSpells = () => {
             <SpellCard key={sp.name} onClick={() => setOpen(o ? null : sp.name)} $open={o} $color={col}>
               <SpellHeadRow>
                 <SpellName>{sp.name}</SpellName>
-                <MChip color={col} solid>{['Cantrip', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th'][sp.level]}</MChip>
+                <MChip color={col} solid>{spellLevelLabels[sp.level]}</MChip>
               </SpellHeadRow>
               <SpellMeta>{sp.school} · {sp.castingTime} · {sp.range}</SpellMeta>
               {sp.roll && <RollChipsRow>

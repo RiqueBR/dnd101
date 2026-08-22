@@ -2,11 +2,8 @@ import { useState, useMemo } from 'react';
 import styled from 'styled-components';
 import { DND_DATA } from '../../data/dndData.js';
 import { fadeIn } from '../../styles/keyframes.js';
-import { schoolColors, rollTypeMeta, actionTypeColors, synergyLabels, synergyColors, dieShapes } from '../../styles/tokens.js';
+import { schoolColors, rollTypeMeta, actionTypeColors, synergyLabels, synergyColors, dieShapes, spellSchools, spellLevelLabels } from '../../styles/tokens.js';
 import { Label, StatBadge, RaceCard, ClassCard, DetailPanel } from './Cards.jsx';
-
-const LEVEL_LABELS = ['Cantrip', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th'];
-const SCHOOLS = ['All', 'Evocation', 'Abjuration', 'Conjuration', 'Illusion', 'Enchantment', 'Necromancy', 'Divination', 'Transmutation'];
 
 const HeaderWrap = styled.div`
   margin-bottom: 24px;
@@ -1027,7 +1024,7 @@ export const SpellsSection = () => {
       </DicePrimer>
 
       <FilterRow>
-        {SCHOOLS.map((s) => {
+        {spellSchools.map((s) => {
           const active = filter === s;
           const c = schoolColors[s];
           return <FilterButton key={s} onClick={() => setFilter(s)} $active={active} $color={c}>{s}</FilterButton>;
@@ -1043,7 +1040,7 @@ export const SpellsSection = () => {
               <SpellHeadRow>
                 <SpellName>{spell.name}</SpellName>
                 <SpellBadgeRow>
-                  <LevelChip $color={c}>{LEVEL_LABELS[spell.level]}</LevelChip>
+                  <LevelChip $color={c}>{spellLevelLabels[spell.level]}</LevelChip>
                   <SchoolChip>{spell.school}</SchoolChip>
                 </SpellBadgeRow>
               </SpellHeadRow>

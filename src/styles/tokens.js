@@ -67,6 +67,11 @@ export const schoolColors = {
   Transmutation: '#5a7a8b',
 };
 
+export const spellSchools = ['All', ...Object.keys(schoolColors)];
+
+// Indexed 0-9 by a spell's level; index 0 is the cantrip label.
+export const spellLevelLabels = ['Cantrip', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th'];
+
 export const rollTypeMeta = {
   attack: { label: 'Attack Roll', color: '#c8743a' },
   save: { label: 'Save vs DC', color: '#8b3a3a' },
