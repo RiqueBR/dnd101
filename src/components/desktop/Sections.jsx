@@ -215,7 +215,10 @@ const SpellGrid = styled.div`
   gap: 10px;
 `;
 
-const SpellCard = styled.div`
+const SpellCard = styled.button`
+  display: block;
+  width: 100%;
+  text-align: left;
   background: var(--surface);
   border: 1px solid ${(p) => (p.$open ? p.$color : 'var(--border)')};
   border-left: 3px solid ${(p) => p.$color};

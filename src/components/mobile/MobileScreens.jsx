@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import { DND_DATA } from '../../data/dndData.js';
@@ -488,7 +488,10 @@ const SpellFilterButton = styled.button`
   -webkit-tap-highlight-color: transparent;
 `;
 
-const SpellCard = styled.div`
+const SpellCard = styled.button`
+  display: block;
+  width: 100%;
+  text-align: left;
   background: var(--surface);
   border: 1px solid ${(p) => (p.$open ? p.$color : 'var(--border)')};
   border-left: 3px solid ${(p) => p.$color};
@@ -581,7 +584,10 @@ const SpellHint = styled.div`
   opacity: 0.8;
 `;
 
-const AbilityRow = styled.div`
+const AbilityRow = styled.button`
+  display: block;
+  width: 100%;
+  text-align: left;
   background: var(--surface);
   border: 1px solid ${(p) => (p.$open ? p.$color : 'var(--border)')};
   border-left: 3px solid ${(p) => p.$color};
@@ -927,21 +933,45 @@ const MRow = ({ color, badge, title, sub, chips, onClick }) => (
   </RowButton>
 );
 
-const MDetail = ({ title, sub, color, onBack, children }) => createPortal(
-  <Sheet>
-    <SheetHead>
-      <BackButton onClick={onBack}>‹ Back</BackButton>
-    </SheetHead>
-    <SheetBody>
-      <SheetHeader $color={color}>
-        <SheetTitle>{title}</SheetTitle>
-        <SheetSub>{sub}</SheetSub>
-      </SheetHeader>
-      {children}
-    </SheetBody>
-  </Sheet>,
-  document.body,
-);
+const MDetail = ({ title, sub, color, onBack, children }) => {
+  const titleId = useId();
+  const backButtonRef = useRef(null);
+
+  useEffect(() => {
+    const previouslyFocused = document.activeElement;
+    backButtonRef.current?.focus();
+
+    const root = document.getElementById('root');
+    if (root) root.inert = true;
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onBack();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      if (root) root.inert = false;
+      document.removeEventListener('keydown', handleKeyDown);
+      previouslyFocused?.focus?.();
+    };
+  }, [onBack]);
+
+  return createPortal(
+    <Sheet role="dialog" aria-modal="true" aria-labelledby={titleId}>
+      <SheetHead>
+        <BackButton ref={backButtonRef} onClick={onBack}>‹ Back</BackButton>
+      </SheetHead>
+      <SheetBody>
+        <SheetHeader $color={color}>
+          <SheetTitle id={titleId}>{title}</SheetTitle>
+          <SheetSub>{sub}</SheetSub>
+        </SheetHeader>
+        {children}
+      </SheetBody>
+    </Sheet>,
+    document.body,
+  );
+};
 
 const MCard = ({ children, color }) => <CardWrap $color={color}>{children}</CardWrap>;
 

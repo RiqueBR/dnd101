@@ -43,7 +43,10 @@ const DifficultyWrap = styled.span`
   border: 1px solid ${(p) => p.$color}44;
 `;
 
-const CardWrap = styled.div`
+const CardWrap = styled.button`
+  display: block;
+  width: 100%;
+  text-align: left;
   background: var(--surface);
   border: 1px solid ${(p) => (p.$selected ? 'var(--accent)' : 'var(--border)')};
   border-top: 3px solid ${(p) => (p.$selected ? 'var(--accent)' : p.$color)};
