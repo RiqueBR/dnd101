@@ -99,7 +99,7 @@ export function AppShell({ theme, toggleTheme }) {
 
   return (
     <Shell>
-      <SidebarCol>
+      <SidebarCol id="app-sidebar">
         <Header theme={theme} toggleTheme={toggleTheme} />
         <Nav activeId={activeNavId} onSelect={handleSelect} isNarrow={isNarrow} />
       </SidebarCol>

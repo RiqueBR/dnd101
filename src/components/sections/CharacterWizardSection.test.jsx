@@ -1,7 +1,32 @@
-import { describe, expect, it } from 'vitest';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { afterEach, describe, expect, it } from 'vitest';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { CharacterWizardSection } from './CharacterWizardSection.jsx';
 import { DND_DATA } from '../../data/dndData.js';
+
+// jsdom has no ResizeObserver; installs a controllable stand-in so tests can
+// simulate the wizard's detail view container growing/shrinking past the
+// `@container (max-width: 640px)` breakpoint that flips it between an inline
+// side panel and a full-screen modal.
+function installResizeObserverMock() {
+  const observers = [];
+  class MockResizeObserver {
+    constructor(callback) {
+      this.callback = callback;
+      observers.push(this);
+    }
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  }
+  window.ResizeObserver = MockResizeObserver;
+  return {
+    triggerWidth: (width) => {
+      act(() => {
+        observers.forEach((o) => o.callback([{ contentRect: { width } }]));
+      });
+    },
+  };
+}
 
 describe('CharacterWizardSection', () => {
   const race = DND_DATA.races[0];
@@ -78,5 +103,62 @@ describe('CharacterWizardSection', () => {
 
     fireEvent.keyDown(document, { key: 'Escape' });
     expect(screen.queryByText(race.description)).not.toBeInTheDocument();
+  });
+
+  it('moves focus into the detail view on open and returns it to the triggering card on close', () => {
+    const { container } = render(<CharacterWizardSection />);
+
+    const raceButton = screen.getByText(race.name).closest('button');
+    raceButton.focus();
+    fireEvent.click(raceButton);
+
+    const detailBox = container.querySelector('[tabindex="-1"]');
+    expect(detailBox).toHaveTextContent(race.description);
+    expect(detailBox).toHaveFocus();
+
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(raceButton).toHaveFocus();
+  });
+
+  describe('detail view container-width behavior', () => {
+    afterEach(() => {
+      delete window.ResizeObserver;
+    });
+
+    it('treats the detail view as a non-modal side panel when its container is wide, leaving the rest of the app interactive', () => {
+      const ro = installResizeObserverMock();
+      render(
+        <div>
+          <div id="app-sidebar">sidebar</div>
+          <CharacterWizardSection />
+        </div>,
+      );
+
+      fireEvent.click(screen.getByText(race.name));
+      ro.triggerWidth(900);
+
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      expect(document.getElementById('app-sidebar').inert).toBeFalsy();
+    });
+
+    it('treats the detail view as a modal dialog when its container is narrow, making the rest of the app inert', () => {
+      const ro = installResizeObserverMock();
+      render(
+        <div>
+          <div id="app-sidebar">sidebar</div>
+          <CharacterWizardSection />
+        </div>,
+      );
+
+      fireEvent.click(screen.getByText(race.name));
+      ro.triggerWidth(400);
+
+      const dialog = screen.getByRole('dialog', { name: `${race.name} details` });
+      expect(dialog).toHaveTextContent(race.description);
+      expect(document.getElementById('app-sidebar').inert).toBe(true);
+
+      fireEvent.keyDown(document, { key: 'Escape' });
+      expect(document.getElementById('app-sidebar').inert).toBe(false);
+    });
   });
 });
