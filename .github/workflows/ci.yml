@@ -1,4 +1,4 @@
-name: CI
+name: Continuous Intervention
 
 on:
   push:
@@ -25,9 +25,6 @@ jobs:
 
       - name: Audit dependencies
         run: npm audit --audit-level=critical
-
-      - name: Lint
-        run: npm run lint
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium

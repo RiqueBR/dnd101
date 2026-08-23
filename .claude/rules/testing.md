@@ -9,13 +9,13 @@ When a flow is already covered end-to-end, don't also re-assert it piecemeal in 
 
 ## Commands
 
-- `npm test`: full suite (unit, then e2e) — what CI runs
+- `npm test`: full gate (lint, then unit, then e2e) — what CI runs
+- `npm run lint`: oxlint only
 - `npm run test:unit`: Vitest only
 - `npm run test:e2e`: Playwright only (starts the dev server itself)
 - `npm run test:watch`: Vitest watch mode, use while developing
-- `npm run lint`: oxlint
 
-Run `npm test` and `npm run lint` before considering any change done. Don't wait until PR time to discover a failure.
+Run `npm test` before considering any change done. Don't wait until PR time to discover a failure.
 
 ## Unit tests
 
@@ -50,4 +50,4 @@ Use Testing Library queries against rendered output (`getByRole`, `getByText`, e
 
 ## Before opening a PR
 
-CI (`.github/workflows/ci.yml`) runs `npm run lint`, `npm test` (unit + e2e), then `npm run build` on every PR, and `main` requires this to pass. Run all three locally before pushing.
+CI (`.github/workflows/ci.yml`) runs `npm test` (lint + unit + e2e), then `npm run build` on every PR, and `main` requires this to pass. Run both locally before pushing.
