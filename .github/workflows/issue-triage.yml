@@ -15,6 +15,7 @@ jobs:
     permissions:
       contents: read
       issues: write
+      id-token: write # required so the action can fetch a GitHub OIDC token
 
     steps:
       - name: Checkout repository
