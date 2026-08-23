@@ -1,5 +1,7 @@
 # D&D 101
 
+[![CI](https://github.com/RiqueBR/dnd101/actions/workflows/ci.yml/badge.svg)](https://github.com/RiqueBR/dnd101/actions/workflows/ci.yml)
+
 A beginner's reference to Dungeons & Dragons 5th Edition: races, classes, race/class pairings, ability scores, actions, spells, and the anatomy of a combat round.
 
 A single React app that renders a sidebar desktop layout above 768px and a bottom-tab mobile layout at or below it, switching live on resize. Two hand-crafted dark ("Grimoire") and light ("Scroll") themes, toggleable and persisted to `localStorage`.
