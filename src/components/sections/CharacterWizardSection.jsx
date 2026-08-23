@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { DND_DATA } from '../../data/dndData.js';
 import { synergyLabels, synergyColors } from '../../styles/tokens.js';
@@ -19,7 +19,8 @@ const STEPS = [
 // containers, a centered popup with a backdrop on narrow ones. Purely
 // CSS-driven via @container so the same markup serves both layouts — no
 // device detection or JS breakpoint fork.
-const DETAIL_BREAKPOINT = '640px';
+const DETAIL_BREAKPOINT_PX = 640;
+const DETAIL_BREAKPOINT = `${DETAIL_BREAKPOINT_PX}px`;
 
 const StepperRow = styled.div`
   display: flex;
@@ -343,16 +344,51 @@ export const CharacterWizardSection = () => {
   const [raceId, setRaceId] = useState(null);
   const [classId, setClassId] = useState(null);
   const [viewId, setViewId] = useState(null);
+  const [isOverlayModal, setIsOverlayModal] = useState(false);
+  const wizardBodyRef = useRef(null);
+  const headerAreaRef = useRef(null);
+  const cardColumnRef = useRef(null);
+  const detailBoxRef = useRef(null);
 
   const list = step === 'race' ? races : classes;
   const viewItem = step !== 'review' ? list.find((i) => i.id === viewId) : null;
 
+  // Mirrors the `@container (max-width: ${DETAIL_BREAKPOINT})` rule below in
+  // JS so the detail view's ARIA/focus handling matches whichever layout
+  // (inline side panel vs. full-screen modal) it's actually rendered as.
+  useEffect(() => {
+    const el = wizardBodyRef.current;
+    if (!el || typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver(([entry]) => {
+      setIsOverlayModal(entry.contentRect.width <= DETAIL_BREAKPOINT_PX);
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   useEffect(() => {
     if (!viewItem) return;
+    const previouslyFocused = document.activeElement;
+    detailBoxRef.current?.focus();
+
     const handleKey = (e) => { if (e.key === 'Escape') setViewId(null); };
     window.addEventListener('keydown', handleKey);
-    return () => window.removeEventListener('keydown', handleKey);
+
+    return () => {
+      window.removeEventListener('keydown', handleKey);
+      previouslyFocused?.focus?.();
+    };
   }, [viewItem]);
+
+  // When the detail view is rendered as a full-screen modal, everything
+  // behind it is fully hidden but would otherwise stay reachable by
+  // keyboard/screen reader. Make it inert for as long as the modal is open.
+  useEffect(() => {
+    if (!viewItem || !isOverlayModal) return;
+    const targets = [document.getElementById('app-sidebar'), headerAreaRef.current, cardColumnRef.current].filter(Boolean);
+    targets.forEach((el) => { el.inert = true; });
+    return () => targets.forEach((el) => { el.inert = false; });
+  }, [viewItem, isOverlayModal]);
 
   const stepReachable = (id) => id === 'race' || (id === 'class' && raceId) || (id === 'review' && raceId && classId);
 
@@ -386,9 +422,11 @@ export const CharacterWizardSection = () => {
 
   return (
     <div>
-      <SectionHeader title="Character Builder" subtitle="A guided walk through building a character: pick a race, pick a class, then see how the two pair together." />
+      <div ref={headerAreaRef}>
+        <SectionHeader title="Character Builder" subtitle="A guided walk through building a character: pick a race, pick a class, then see how the two pair together." />
 
-      <StepTracker steps={STEPS} currentIndex={currentIndex} reachable={stepReachable} onJump={handleStepClick} />
+        <StepTracker steps={STEPS} currentIndex={currentIndex} reachable={stepReachable} onJump={handleStepClick} />
+      </div>
 
       {step === 'review' ? (
         result && raceObj && classObj ? (
@@ -397,8 +435,8 @@ export const CharacterWizardSection = () => {
           <Placeholder>No pairing write-up yet for {raceObj?.name} + {classObj?.name} — the combo still works, it just isn't documented here.</Placeholder>
         )
       ) : (
-        <WizardBody>
-          <CardColumn>
+        <WizardBody ref={wizardBodyRef}>
+          <CardColumn ref={cardColumnRef}>
             <Grid $min="240px">
               {step === 'race'
                 ? races.map((r) => <RaceCard key={r.id} race={r} onClick={openView} isSelected={raceId === r.id} />)
@@ -407,7 +445,14 @@ export const CharacterWizardSection = () => {
           </CardColumn>
           <DetailOverlay $open={!!viewItem} onClick={() => setViewId(null)}>
             {viewItem && (
-              <DetailBox onClick={(e) => e.stopPropagation()}>
+              <DetailBox
+                ref={detailBoxRef}
+                tabIndex={-1}
+                role={isOverlayModal ? 'dialog' : undefined}
+                aria-modal={isOverlayModal || undefined}
+                aria-label={isOverlayModal ? `${viewItem.name} details` : undefined}
+                onClick={(e) => e.stopPropagation()}
+              >
                 <DetailPanel title={viewItem.name} tagline={viewItem.tagline} color={viewItem.color} description={viewItem.description} onClose={() => setViewId(null)}>
                   {step === 'race' ? <RaceDetailBody race={viewItem} /> : <ClassDetailBody cls={viewItem} />}
                 </DetailPanel>

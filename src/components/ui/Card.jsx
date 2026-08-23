@@ -13,7 +13,10 @@ export const Surface = styled.div`
 `;
 
 // Clickable, selectable variant used for race/class cards and similar list items.
-export const Card = styled(Surface)`
+export const Card = styled(Surface).attrs({ as: 'button' })`
+  display: block;
+  width: 100%;
+  text-align: left;
   container-type: inline-size;
   cursor: pointer;
   transition: all 0.2s ease;

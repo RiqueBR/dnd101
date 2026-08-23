@@ -29,7 +29,10 @@ const ItalicNote = styled.span`
   font-style: italic;
 `;
 
-const SpellCard = styled(Surface)`
+const SpellCard = styled(Surface).attrs({ as: 'button' })`
+  display: block;
+  width: 100%;
+  text-align: left;
   container-type: inline-size;
   cursor: pointer;
   transition: border-color 0.15s;
