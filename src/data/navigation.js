@@ -1,12 +1,10 @@
 // Single nav tree consumed by Nav.jsx at every viewport size.
-// Wide layouts flatten this into 7 direct destinations; narrow layouts show
-// the 5 top-level entries and fold a `children` group's items into an
+// Wide layouts flatten this into 5 direct destinations; narrow layouts show
+// the 3 top-level entries and fold a `children` group's items into an
 // in-content sub-tab bar. See flattenSections() for the flattening helper.
 
 export const NAV_SECTIONS = [
-  { id: 'races', label: 'Races', icon: '◈' },
-  { id: 'classes', label: 'Classes', icon: '⚔' },
-  { id: 'pairings', label: 'Race + Class', icon: '◎' },
+  { id: 'builder', label: 'Character Builder', icon: '✎' },
   {
     id: 'rules',
     label: 'Rules',

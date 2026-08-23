@@ -28,12 +28,12 @@ describe('AppShell', () => {
     window.localStorage = originalLocalStorage;
   });
 
-  it('renders all 7 sections directly in the nav on wide viewports', () => {
+  it('renders all 5 sections directly in the nav on wide viewports', () => {
     installMatchMediaMock(false);
     render(<AppShell theme="grimoire" toggleTheme={() => {}} />);
 
     const nav = screen.getByRole('navigation');
-    for (const label of ['Races', 'Classes', 'Race + Class', 'Ability Scores', 'Actions', 'Anatomy of a Round', 'Spells']) {
+    for (const label of ['Character Builder', 'Ability Scores', 'Actions', 'Anatomy of a Round', 'Spells']) {
       expect(within(nav).getByText(label)).toBeInTheDocument();
     }
     expect(within(nav).queryByText('Rules')).not.toBeInTheDocument();
