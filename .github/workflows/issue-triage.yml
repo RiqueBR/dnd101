@@ -1,0 +1,50 @@
+name: Issue Triage
+
+on:
+  issues:
+    types: [opened]
+
+concurrency:
+  group: triage-issue-${{ github.event.issue.number }}
+  cancel-in-progress: true
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Classify issue and apply labels
+        uses: anthropics/claude-code-action@v1
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            REPO: ${{ github.repository }}
+            ISSUE NUMBER: ${{ github.event.issue.number }}
+            ISSUE TITLE: ${{ github.event.issue.title }}
+            ISSUE BODY:
+            ${{ github.event.issue.body }}
+
+            Read CONTRIBUTING.md for the full label taxonomy (type:*, area:*,
+            risk:*) and what each label means. Read whatever source under
+            src/ you need to judge where this issue lives and how risky an
+            unattended fix would be.
+
+            Apply exactly one type:*, one area:*, and one risk:* label to
+            this issue, using:
+              gh issue edit ${{ github.event.issue.number }} --add-label "<label>"
+
+            Every label must be one already defined in CONTRIBUTING.md. Do
+            not invent new labels, do not add any other labels, do not
+            comment on the issue, and do not edit any files.
+          claude_args: |
+            --max-turns 8
+            --allowedTools "Read,Glob,Grep,Bash(gh issue edit:*)"

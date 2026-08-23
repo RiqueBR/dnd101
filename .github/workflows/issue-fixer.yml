@@ -1,0 +1,68 @@
+name: Issue Fixer
+
+on:
+  issues:
+    types: [labeled]
+
+concurrency:
+  group: fixer-issue-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  fix:
+    if: |
+      (contains(github.event.issue.labels.*.name, 'risk:low') ||
+       contains(github.event.issue.labels.*.name, 'risk:medium')) &&
+      !contains(github.event.issue.labels.*.name, 'type:ci') &&
+      !contains(github.event.issue.labels.*.name, 'type:build-config') &&
+      !contains(github.event.issue.labels.*.name, 'type:deps')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Fix issue and open PR
+        uses: anthropics/claude-code-action@v1
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            REPO: ${{ github.repository }}
+            ISSUE NUMBER: ${{ github.event.issue.number }}
+            ISSUE TITLE: ${{ github.event.issue.title }}
+            ISSUE BODY:
+            ${{ github.event.issue.body }}
+
+            Fix this issue. Follow this repo's conventions: branch and PR
+            naming in .claude/rules/branching.md, testing strategy in
+            .claude/rules/testing.md, React/CSS conventions in
+            .claude/rules/react-css.md, and the label taxonomy in
+            CONTRIBUTING.md.
+
+            After making the change, run `npm run lint` and `npm test`. Fix
+            any failures before proceeding; do not open a PR with a failing
+            check. (The build itself is CI's job, gated by branch
+            protection on main — no need to run it here.)
+
+            Then open a pull request against main with `gh pr create` that
+            references issue #${{ github.event.issue.number }} in its body.
+            Do not merge the PR, and do not edit or add issue labels.
+          claude_args: |
+            --max-turns 20
+            --allowedTools "Read,Edit,Write,Glob,Grep,Bash(npm run lint:*),Bash(npm test:*),Bash(git:*),Bash(gh pr create:*)"
