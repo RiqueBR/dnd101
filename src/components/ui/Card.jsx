@@ -50,6 +50,10 @@ export const CardTagline = styled.div`
   font-style: italic;
 `;
 
+// Text stays var(--text) rather than $color: race/class colors aren't
+// guaranteed to clear WCAG AA against either theme's surfaces, so the tint
+// carries the color-coding via background/border while the glyph itself
+// stays reliably readable.
 export const IconBadge = styled.div`
   width: 34px;
   height: 34px;
@@ -62,6 +66,6 @@ export const IconBadge = styled.div`
   font-family: var(--font-heading);
   font-weight: 800;
   font-size: 13px;
-  color: ${(p) => p.$color};
+  color: var(--text);
   flex-shrink: 0;
 `;

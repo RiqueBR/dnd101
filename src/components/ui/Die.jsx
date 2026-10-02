@@ -20,7 +20,7 @@ const DieShape = styled.div`
   font-family: var(--font-heading);
   font-weight: 800;
   font-size: 14px;
-  color: ${(p) => p.$color || 'var(--dice-color)'};
+  color: ${(p) => (p.$color ? 'var(--text)' : 'var(--dice-color)')};
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
 `;
 

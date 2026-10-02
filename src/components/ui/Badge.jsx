@@ -41,7 +41,11 @@ export const StatBadge = ({ stat, value }) => (
   </StatBadgeWrap>
 );
 
-// Generic pill: solid/tinted by $color when $solid, neutral outline otherwise.
+// Generic pill: tinted fill + border by $color when $solid, neutral outline
+// otherwise. Text always stays var(--text)/var(--text-muted) rather than
+// $color itself — content colors are tuned for backgrounds/borders, not for
+// use as foreground text, and don't reliably clear WCAG AA against either
+// theme's surfaces (see react-css.md).
 export const Chip = styled.span`
   display: inline-block;
   padding: 2px 9px;
@@ -50,7 +54,7 @@ export const Chip = styled.span`
   font-weight: 700;
   white-space: nowrap;
   background: ${(p) => (p.$solid ? `${p.$color}22` : 'var(--surface2)')};
-  color: ${(p) => (p.$solid ? p.$color : 'var(--text-muted)')};
+  color: ${(p) => (p.$solid ? 'var(--text)' : 'var(--text-muted)')};
   border: 1px solid ${(p) => (p.$solid ? `${p.$color}44` : 'var(--border)')};
 `;
 
