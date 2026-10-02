@@ -14,7 +14,7 @@ const List = styled.nav`
     order: 2;
     flex: none;
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(${NAV_SECTIONS.length}, 1fr);
     gap: 2px;
     position: fixed;
     bottom: 0;
