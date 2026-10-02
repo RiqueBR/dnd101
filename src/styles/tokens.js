@@ -12,7 +12,7 @@ export const themeTokens = {
     border: '#26262f',
     borderHover: '#3a3a48',
     text: '#e8e0d2',
-    textMuted: '#7a7488',
+    textMuted: '#8b8698',
     accent: '#c8a96e',
     accentSubtle: '#c8a96e18',
     accentBorder: '#c8a96e44',

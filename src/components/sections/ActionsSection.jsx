@@ -10,7 +10,7 @@ const OverviewName = styled.div`
   font-family: var(--font-heading);
   font-size: 13px;
   font-weight: 700;
-  color: ${(p) => p.$color};
+  color: var(--text);
   margin-bottom: 5px;
 `;
 

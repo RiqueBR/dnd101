@@ -19,7 +19,7 @@ const ResultNamesRow = styled.div`
 const ResultName = styled.span`
   font-family: var(--font-heading);
   font-size: 20px;
-  color: ${(p) => p.$color};
+  color: var(--text);
 `;
 
 const ResultPlus = styled.span`
@@ -52,7 +52,7 @@ const SynergySegment = styled.div`
 const ResultSynergyLabel = styled.span`
   font-size: 13px;
   font-weight: 700;
-  color: ${(p) => p.$color};
+  color: var(--text);
   font-family: var(--font-heading);
 `;
 

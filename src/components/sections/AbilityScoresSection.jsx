@@ -41,7 +41,7 @@ const AbilityIcon = styled.div`
   font-size: 18px;
   font-weight: 900;
   font-family: var(--font-heading);
-  color: ${(p) => p.$color};
+  color: var(--text);
   flex-shrink: 0;
 `;
 

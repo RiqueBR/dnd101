@@ -35,5 +35,5 @@ export const PickerButton = styled.button`
   -webkit-tap-highlight-color: transparent;
   background: ${(p) => (p.$active ? (p.$color ? `${p.$color}28` : 'var(--accent-subtle)') : 'var(--surface)')};
   border: 1.5px solid ${(p) => (p.$active ? (p.$color || 'var(--accent)') : 'var(--border)')};
-  color: ${(p) => (p.$active ? (p.$color || 'var(--accent)') : 'var(--text-muted)')};
+  color: ${(p) => (p.$active ? (p.$color ? 'var(--text)' : 'var(--accent)') : 'var(--text-muted)')};
 `;

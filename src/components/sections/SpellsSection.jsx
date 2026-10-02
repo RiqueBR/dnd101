@@ -108,7 +108,7 @@ const DiceNoteBox = styled.div`
 const DiceNoteTitle = styled.div`
   font-size: 9px;
   font-weight: 700;
-  color: ${(p) => p.$color};
+  color: var(--text);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   margin-bottom: 4px;
@@ -134,9 +134,8 @@ const UpcastLabel = styled.strong`
 
 const SpellHint = styled.div`
   font-size: 10px;
-  color: ${(p) => p.$color};
+  color: var(--text-muted);
   margin-top: 4px;
-  opacity: 0.8;
 `;
 
 export const SpellsSection = () => {
