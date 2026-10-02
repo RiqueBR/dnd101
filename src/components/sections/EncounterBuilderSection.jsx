@@ -139,10 +139,15 @@ const MeterBar = styled.div`
   border-radius: 5px;
 `;
 
+// The Trivial band's color is var(--text-muted) (see encounterDifficultyColors)
+// rather than one of the vivid difficulty colors, so it stays visible against
+// var(--surface) on its own — fading it further (like the inactive colorful
+// bands) made it nearly invisible in both themes, since surface2 sits too
+// close in lightness to surface to survive a 35% opacity cut.
 const MeterBand = styled.div`
   width: ${(p) => p.$width}%;
-  background: ${(p) => (p.$muted ? 'var(--surface2)' : p.$color)};
-  opacity: ${(p) => (p.$active ? 1 : 0.35)};
+  background: ${(p) => p.$color};
+  opacity: ${(p) => (p.$active || p.$muted ? 1 : 0.35)};
   border-right: 1px solid var(--bg);
 
   &:first-child {
