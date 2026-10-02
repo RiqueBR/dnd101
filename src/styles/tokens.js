@@ -56,6 +56,14 @@ export const themeTokens = {
 // Content-derived, intentionally theme-independent palettes (see react-css.md).
 export const difficultyColors = { Beginner: '#4a7a2a', Intermediate: '#8b7a1a', Advanced: '#8b3a3a' };
 
+export const encounterDifficultyColors = {
+  Trivial: 'var(--text-muted)',
+  Easy: '#4a8a3a',
+  Medium: '#b08a2a',
+  Hard: '#c8743a',
+  Deadly: '#b03a3a',
+};
+
 export const schoolColors = {
   Evocation: '#c8743a',
   Abjuration: '#4a6fa5',
