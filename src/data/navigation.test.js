@@ -33,8 +33,8 @@ describe('flattenSections', () => {
     expect(ids).toEqual(expect.arrayContaining(['abilities', 'actions', 'rounds']));
   });
 
-  it('yields all 5 leaf sections in nav order', () => {
+  it('yields all 6 leaf sections in nav order', () => {
     const ids = flattenSections().map((leaf) => leaf.id);
-    expect(ids).toEqual(['builder', 'abilities', 'actions', 'rounds', 'spells']);
+    expect(ids).toEqual(['builder', 'encounter', 'abilities', 'actions', 'rounds', 'spells']);
   });
 });

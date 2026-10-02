@@ -5,6 +5,7 @@
 
 export const NAV_SECTIONS = [
   { id: 'builder', label: 'Character Builder', icon: '✎' },
+  { id: 'encounter', label: 'Encounter', icon: '⚔' },
   {
     id: 'rules',
     label: 'Rules',

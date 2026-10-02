@@ -1,11 +1,11 @@
 import { test, expect } from '@playwright/test';
 
-const DESKTOP_SECTIONS = ['Character Builder', 'Ability Scores', 'Actions', 'Anatomy of a Round', 'Spells'];
+const DESKTOP_SECTIONS = ['Character Builder', 'Encounter', 'Ability Scores', 'Actions', 'Anatomy of a Round', 'Spells'];
 
 test.describe('desktop navigation', () => {
   test.use({ viewport: { width: 1280, height: 800 } });
 
-  test('lists all 5 sections directly in the nav and switches between them', async ({ page }) => {
+  test('lists all 6 sections directly in the nav and switches between them', async ({ page }) => {
     await page.goto('/');
     const nav = page.getByRole('navigation');
 
@@ -13,6 +13,9 @@ test.describe('desktop navigation', () => {
       await expect(nav.getByText(label)).toBeVisible();
     }
     await expect(nav.getByText('Rules')).not.toBeVisible();
+
+    await nav.getByText('Encounter').click();
+    await expect(page.getByRole('heading', { name: 'Encounter Builder', level: 2 })).toBeVisible();
 
     await nav.getByText('Spells').click();
     await expect(page.getByRole('heading', { name: 'Spells', level: 2 })).toBeVisible();
