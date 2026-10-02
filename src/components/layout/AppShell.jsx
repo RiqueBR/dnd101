@@ -10,6 +10,7 @@ import { AbilityScoresSection } from '../sections/AbilityScoresSection.jsx';
 import { ActionsSection } from '../sections/ActionsSection.jsx';
 import { RoundsSection } from '../sections/RoundsSection.jsx';
 import { SpellsSection } from '../sections/SpellsSection.jsx';
+import { EncountersSection } from '../sections/EncountersSection.jsx';
 
 const SECTION_COMPONENTS = {
   builder: CharacterWizardSection,
@@ -17,6 +18,7 @@ const SECTION_COMPONENTS = {
   actions: ActionsSection,
   rounds: RoundsSection,
   spells: SpellsSection,
+  encounters: EncountersSection,
 };
 
 const RULES_GROUP = NAV_SECTIONS.find((s) => s.id === 'rules');

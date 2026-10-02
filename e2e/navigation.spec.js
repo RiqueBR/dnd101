@@ -1,11 +1,11 @@
 import { test, expect } from '@playwright/test';
 
-const DESKTOP_SECTIONS = ['Character Builder', 'Ability Scores', 'Actions', 'Anatomy of a Round', 'Spells'];
+const DESKTOP_SECTIONS = ['Character Builder', 'Ability Scores', 'Actions', 'Anatomy of a Round', 'Spells', 'Encounters'];
 
 test.describe('desktop navigation', () => {
   test.use({ viewport: { width: 1280, height: 800 } });
 
-  test('lists all 5 sections directly in the nav and switches between them', async ({ page }) => {
+  test('lists all 6 sections directly in the nav and switches between them', async ({ page }) => {
     await page.goto('/');
     const nav = page.getByRole('navigation');
 
@@ -19,6 +19,10 @@ test.describe('desktop navigation', () => {
 
     await nav.getByText('Actions').click();
     await expect(page.getByRole('heading', { name: 'Actions', level: 2 })).toBeVisible();
+
+    await nav.getByText('Encounters').click();
+    await expect(page.getByRole('heading', { name: 'Encounters', level: 2 })).toBeVisible();
+    await expect(page.getByText('Under Construction')).toBeVisible();
   });
 
   test('keeps the active section after a reload', async ({ page }) => {

@@ -16,6 +16,7 @@ export const NAV_SECTIONS = [
     ],
   },
   { id: 'spells', label: 'Spells', icon: '✦' },
+  { id: 'encounters', label: 'Encounters', icon: '⚔' },
 ];
 
 // Every leaf section, in nav order, as it appears on wide (sidebar) layouts.
