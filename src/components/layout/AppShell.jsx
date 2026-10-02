@@ -6,19 +6,19 @@ import { NAV_SECTIONS } from '../../data/navigation.js';
 import { Nav, RulesTabBar } from './Nav.jsx';
 import { Header } from './Header.jsx';
 import { CharacterWizardSection } from '../sections/CharacterWizardSection.jsx';
+import { EncounterBuilderSection } from '../sections/EncounterBuilderSection.jsx';
 import { AbilityScoresSection } from '../sections/AbilityScoresSection.jsx';
 import { ActionsSection } from '../sections/ActionsSection.jsx';
 import { RoundsSection } from '../sections/RoundsSection.jsx';
 import { SpellsSection } from '../sections/SpellsSection.jsx';
-import { EncountersSection } from '../sections/EncountersSection.jsx';
 
 const SECTION_COMPONENTS = {
   builder: CharacterWizardSection,
+  encounter: EncounterBuilderSection,
   abilities: AbilityScoresSection,
   actions: ActionsSection,
   rounds: RoundsSection,
   spells: SpellsSection,
-  encounters: EncountersSection,
 };
 
 const RULES_GROUP = NAV_SECTIONS.find((s) => s.id === 'rules');

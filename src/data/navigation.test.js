@@ -35,6 +35,6 @@ describe('flattenSections', () => {
 
   it('yields all 6 leaf sections in nav order', () => {
     const ids = flattenSections().map((leaf) => leaf.id);
-    expect(ids).toEqual(['builder', 'abilities', 'actions', 'rounds', 'spells', 'encounters']);
+    expect(ids).toEqual(['builder', 'encounter', 'abilities', 'actions', 'rounds', 'spells']);
   });
 });

@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-const DESKTOP_SECTIONS = ['Character Builder', 'Ability Scores', 'Actions', 'Anatomy of a Round', 'Spells', 'Encounters'];
+const DESKTOP_SECTIONS = ['Character Builder', 'Encounter', 'Ability Scores', 'Actions', 'Anatomy of a Round', 'Spells'];
 
 test.describe('desktop navigation', () => {
   test.use({ viewport: { width: 1280, height: 800 } });
@@ -14,15 +14,14 @@ test.describe('desktop navigation', () => {
     }
     await expect(nav.getByText('Rules')).not.toBeVisible();
 
+    await nav.getByText('Encounter').click();
+    await expect(page.getByRole('heading', { name: 'Encounter Builder', level: 2 })).toBeVisible();
+
     await nav.getByText('Spells').click();
     await expect(page.getByRole('heading', { name: 'Spells', level: 2 })).toBeVisible();
 
     await nav.getByText('Actions').click();
     await expect(page.getByRole('heading', { name: 'Actions', level: 2 })).toBeVisible();
-
-    await nav.getByText('Encounters').click();
-    await expect(page.getByRole('heading', { name: 'Encounters', level: 2 })).toBeVisible();
-    await expect(page.getByText('Under Construction')).toBeVisible();
   });
 
   test('keeps the active section after a reload', async ({ page }) => {
