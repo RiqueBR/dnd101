@@ -45,7 +45,7 @@ export const computeEncounter = (party, encounter) => {
   const multiplier = monsterMultiplier(monsterCount, partySize);
   const adjustedXP = Math.round(baseXP * multiplier);
 
-  let difficulty = 'Trivial';
+  let difficulty = 'Easy';
   partyThresholds.forEach((xp, i) => { if (adjustedXP >= xp) difficulty = DIFFICULTIES[i]; });
 
   return { thresholds: partyThresholds, partySize, baseXP, monsterCount, multiplier, adjustedXP, difficulty };
