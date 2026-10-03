@@ -155,15 +155,10 @@ const MeterBar = styled.div`
   border-radius: 5px;
 `;
 
-// The Trivial band's color is var(--text-muted) (see encounterDifficultyColors)
-// rather than one of the vivid difficulty colors, so it stays visible against
-// var(--surface) on its own — fading it further (like the inactive colorful
-// bands) made it nearly invisible in both themes, since surface2 sits too
-// close in lightness to surface to survive a 35% opacity cut.
 const MeterBand = styled.div`
   width: ${(p) => p.$width}%;
   background: ${(p) => p.$color};
-  opacity: ${(p) => (p.$active || p.$muted ? 1 : 0.35)};
+  opacity: ${(p) => (p.$active ? 1 : 0.35)};
   border-right: 1px solid var(--bg);
 
   &:first-child {
@@ -221,8 +216,7 @@ const DifficultyMeter = ({ result }) => {
   const max = Math.max(result.thresholds[3] * 1.35, result.adjustedXP * 1.05, 1);
   const pos = Math.min(result.adjustedXP / max, 1) * 100;
   const bands = [
-    [0, result.thresholds[0], 'Trivial'],
-    [result.thresholds[0], result.thresholds[1], 'Easy'],
+    [0, result.thresholds[1], 'Easy'],
     [result.thresholds[1], result.thresholds[2], 'Medium'],
     [result.thresholds[2], result.thresholds[3], 'Hard'],
     [result.thresholds[3], max, 'Deadly'],
@@ -243,7 +237,6 @@ const DifficultyMeter = ({ result }) => {
             key={label}
             $width={((to - from) / max) * 100}
             $color={encounterDifficultyColors[label]}
-            $muted={label === 'Trivial'}
             $active={label === result.difficulty && result.monsterCount > 0}
           />
         ))}

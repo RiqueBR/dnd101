@@ -16,7 +16,7 @@ test.describe('encounter builder', () => {
     await page.getByRole('button', { name: 'Add Goblin' }).click();
 
     await expect(page.getByText('No monsters yet')).not.toBeVisible();
-    await expect(page.getByText('Trivial')).toBeVisible();
+    await expect(page.getByText(/base XP/)).toBeVisible();
     await expect(page.getByText(/CR 1\/4/)).toBeVisible();
 
     await page.getByRole('button', { name: 'Clear', exact: true }).click();

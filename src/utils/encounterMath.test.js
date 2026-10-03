@@ -48,9 +48,9 @@ describe('monsterMultiplier', () => {
 describe('computeEncounter', () => {
   const party = [{ count: 4, level: 3 }];
 
-  it('labels Trivial when there are no monsters', () => {
+  it('labels Easy when there are no monsters', () => {
     const r = computeEncounter(party, []);
-    expect(r.difficulty).toBe('Trivial');
+    expect(r.difficulty).toBe('Easy');
     expect(r.adjustedXP).toBe(0);
   });
 

@@ -57,7 +57,6 @@ export const themeTokens = {
 export const difficultyColors = { Beginner: '#4a7a2a', Intermediate: '#8b7a1a', Advanced: '#8b3a3a' };
 
 export const encounterDifficultyColors = {
-  Trivial: 'var(--text-muted)',
   Easy: '#4a8a3a',
   Medium: '#b08a2a',
   Hard: '#c8743a',
