@@ -5,7 +5,8 @@
 
 export const NAV_SECTIONS = [
   { id: 'builder', label: 'Character Builder', icon: '✎' },
-  { id: 'encounter', label: 'Encounter', icon: '⚔' },
+  // U+FE0E (text variation selector) stops iOS from swapping ⚔ for its colour emoji.
+  { id: 'encounter', label: 'Encounter', icon: '\u2694\uFE0E' },
   {
     id: 'rules',
     label: 'Rules',

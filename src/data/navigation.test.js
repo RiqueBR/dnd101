@@ -19,6 +19,12 @@ describe('NAV_SECTIONS', () => {
       }
     }
   });
+
+  it('pins any icon with an emoji form to text presentation so iOS keeps it monochrome', () => {
+    for (const { icon } of flattenSections()) {
+      if (/\p{Emoji}/u.test(icon)) expect(icon).toContain('\uFE0E');
+    }
+  });
 });
 
 describe('flattenSections', () => {
