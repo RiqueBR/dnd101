@@ -45,14 +45,30 @@ const Layout = styled.div`
   }
 `;
 
+// Sidebar comes first in the DOM so it stacks above the monster list when narrow;
+// explicit columns keep it on the right when the two-column layout applies.
 const Sidebar = styled.div`
+  grid-column: 2;
+  grid-row: 1;
   position: sticky;
   top: 0;
   display: grid;
   gap: 12px;
 
   @container (max-width: 760px) {
+    grid-column: auto;
+    grid-row: auto;
     position: static;
+  }
+`;
+
+const MonsterPicker = styled.div`
+  grid-column: 1;
+  grid-row: 1;
+
+  @container (max-width: 760px) {
+    grid-column: auto;
+    grid-row: auto;
   }
 `;
 
@@ -600,40 +616,6 @@ export const EncounterBuilderSection = () => {
         subtitle="Set your party, add monsters or roll a random fight, and see how dangerous it is using the Dungeon Master's Guide XP budget."
       />
       <Layout>
-        <div>
-          <Label>Monsters</Label>
-          <SearchInput
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by name or type"
-            aria-label="Search monsters by name or type"
-          />
-          <PickerGroup>
-            {['All', ...ENCOUNTER_DATA.envs].map((env) => (
-              <PickerButton key={env} type="button" $active={terrainFilter === env} onClick={() => setTerrainFilter(env)}>
-                {env}
-              </PickerButton>
-            ))}
-          </PickerGroup>
-          <Segmented $count={CR_FILTERS.length} $mb="14px">
-            {CR_FILTERS.map(([label]) => (
-              <SegmentedButton key={label} type="button" $active={crFilter === label} onClick={() => setCrFilter(label)}>
-                {label}
-              </SegmentedButton>
-            ))}
-          </Segmented>
-          <Grid $min="260px" $gap="8px">
-            {filteredMonsters.map((m) => (
-              <MonsterCard
-                key={m.id}
-                monster={m}
-                qty={(encounter.find((e) => e.id === m.id) || {}).qty || 0}
-                onAdd={() => addMonster(m.id)}
-              />
-            ))}
-          </Grid>
-          {filteredMonsters.length === 0 && <EmptyNote>No monsters match these filters.</EmptyNote>}
-        </div>
         <Sidebar>
           <Surface><DifficultyMeter result={result} /></Surface>
           <PartyEditor party={party} onChange={setParty} />
@@ -686,6 +668,40 @@ export const EncounterBuilderSection = () => {
             </RollDivider>
           </Surface>
         </Sidebar>
+        <MonsterPicker>
+          <Label>Monsters</Label>
+          <SearchInput
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search by name or type"
+            aria-label="Search monsters by name or type"
+          />
+          <PickerGroup>
+            {['All', ...ENCOUNTER_DATA.envs].map((env) => (
+              <PickerButton key={env} type="button" $active={terrainFilter === env} onClick={() => setTerrainFilter(env)}>
+                {env}
+              </PickerButton>
+            ))}
+          </PickerGroup>
+          <Segmented $count={CR_FILTERS.length} $mb="14px">
+            {CR_FILTERS.map(([label]) => (
+              <SegmentedButton key={label} type="button" $active={crFilter === label} onClick={() => setCrFilter(label)}>
+                {label}
+              </SegmentedButton>
+            ))}
+          </Segmented>
+          <Grid $min="260px" $gap="8px">
+            {filteredMonsters.map((m) => (
+              <MonsterCard
+                key={m.id}
+                monster={m}
+                qty={(encounter.find((e) => e.id === m.id) || {}).qty || 0}
+                onAdd={() => addMonster(m.id)}
+              />
+            ))}
+          </Grid>
+          {filteredMonsters.length === 0 && <EmptyNote>No monsters match these filters.</EmptyNote>}
+        </MonsterPicker>
       </Layout>
     </div>
   );
